@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="transport">
+      <UniqueIdentifier>{0b7fb4e1-d30c-41d4-b020-b6ce001d732b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="extend">
+      <UniqueIdentifier>{a23fba8a-005b-4513-8ef7-e7b1629905e8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="transport\CService.h">
+      <Filter>transport</Filter>
+    </ClInclude>
+    <ClInclude Include="transport\CSObjectFactory.h">
+      <Filter>transport</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="transport\CSObjectFactory.cpp">
+      <Filter>transport</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+</Project>

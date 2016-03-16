@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{cd56c234-e9bb-4a14-bbcd-a867825b7c61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Transport">
+      <UniqueIdentifier>{eacefe02-efda-4422-b330-6e835da8ea20}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="transport\IMarshal.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="transport\IObjectFactory.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="transport\IPartitionMeta.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\DSmartPtr.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\ISocket.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\IThread.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\TypeDef.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="tools\CSocket.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\CThread.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

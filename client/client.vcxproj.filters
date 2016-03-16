@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="transport">
+      <UniqueIdentifier>{f6131989-bfe6-42a5-8565-0ede1993a628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{43b3e113-8ce7-45f0-8a84-26d832bf179b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="user_interface">
+      <UniqueIdentifier>{66b3cece-ff48-4d04-8e32-ff4b0f79a1dd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="transport\CCObjectFactory.cpp">
+      <Filter>transport</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="transport\CCObjectFactory.h">
+      <Filter>transport</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
