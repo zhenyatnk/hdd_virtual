@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
    try
    {
       IObjectFactory::Ptr lFactory = CreateClientFactory(lParm);
-      lFactory->CreatePartitionMeta(1);
+      CPartitionMeta::Ptr lPartMeta = lFactory->CreatePartitionMeta(1);
    }
    catch (socket_exception_w &err)
    {

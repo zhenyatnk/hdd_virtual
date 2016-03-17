@@ -27,7 +27,7 @@ public:
 				break;
          else if (lString_buffer == CFormatDataTransport::command_get_object<CPartitionMeta>())
          {
-            CPartitionMeta::Ptr lMeta(new CPartitionMeta(true, 1, 150));
+            CPartitionMeta::Ptr lMeta(new CPartitionMeta(false, 12, 151110));
             mSocketClient->Send(CFormatDataTransport::command_value_object<ConverterToStr>(lMeta));
          }
          else

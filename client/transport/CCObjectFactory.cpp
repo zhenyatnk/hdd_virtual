@@ -25,9 +25,7 @@ private:
       {
          printf("%s\n", lBuffer.GetData());
          if (lBuffer.ToString() != CFormatDataTransport::command_error())
-         {
-            ;
-         }
+            lObject = ConverterFromStr::Convert<TObject>(lBuffer.ToString());
       }
       return lObject;
    }

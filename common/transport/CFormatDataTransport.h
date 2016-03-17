@@ -2,6 +2,7 @@
 #define _CLASS_FORMAT_TRANSPORT_H_
 
 #include <string>
+#include <sstream> 
 #include "CPartitionMeta.h"
 
 class CFormatDataTransport
@@ -50,6 +51,40 @@ public:
    static std::string Convert(bool aValue);
    static std::string Convert(UINT32 aValue);
    static std::string Convert(UINT8 aValue);
+};
+//-------------------------------------------------------------
+class ConverterFromStr
+{
+public:
+   static const char Separator = '\n';
+
+public:
+   template<class TObject>
+   static typename TObject::Ptr Convert(std::string aStr)
+   {
+      "Для метода требуется определить специализацию";
+   }
+
+   template<>
+   static CPartitionMeta::Ptr Convert<CPartitionMeta>(std::string aStr)
+   {
+      CPartitionMeta::Ptr lObject;
+      std::stringstream lStream;
+      lStream.str(aStr);
+      std::string lName; 
+      lStream >> lName;
+      if (lName == CPartitionMeta::GetNameObject())
+      {
+         UINT32 lSizeInSector;
+         UINT32 lTypePart;
+         bool lBoot;
+         lStream >> lName; lStream >> lSizeInSector;
+         lStream >> lName; lStream >> lTypePart;
+         lStream >> lName; lStream >> lBoot;
+         lObject = CPartitionMeta::Ptr(new CPartitionMeta(lBoot, (UINT8)lTypePart, lSizeInSector));
+      }
+      return lObject;
+   }
 };
 //-------------------------------------------------------------
 template <int aBufferSize>

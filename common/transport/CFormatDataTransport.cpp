@@ -2,14 +2,12 @@
 
 std::string ConverterToStr::Convert(CPartitionMeta::Ptr aObject)
 {
-   std::string lStr(CPartitionMeta::GetNameObject());
-   lStr += ConverterToStr::Separator;
-   lStr += std::string("SizeInSector: "); lStr += ConverterToStr::Convert(aObject->GetSizeInSector());
-   lStr += ConverterToStr::Separator;
-   lStr += std::string("TypePart: ");  lStr += ConverterToStr::Convert(aObject->GetTypePart());
-   lStr += ConverterToStr::Separator;
-   lStr += std::string("Boot: "); lStr += ConverterToStr::Convert(aObject->IsBoot());
-   return lStr;
+   std::stringstream lStream;
+   lStream << CPartitionMeta::GetNameObject() << ConverterToStr::Separator;
+   lStream << "SizeInSector" << " " << aObject->GetSizeInSector() << ConverterToStr::Separator;
+   lStream << "TypePart" << " " << (UINT32)aObject->GetTypePart() << ConverterToStr::Separator;
+   lStream << "Boot" << " " << aObject->IsBoot();
+   return lStream.str();
 }
 
 std::string ConverterToStr::Convert(bool aValue)
