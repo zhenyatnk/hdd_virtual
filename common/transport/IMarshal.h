@@ -1,4 +1,4 @@
-#ifndef _I_MARSHAL_H_
+﻿#ifndef _I_MARSHAL_H_
 #define _I_MARSHAL_H_
 
 #include "..\tools\TypeDef.h"

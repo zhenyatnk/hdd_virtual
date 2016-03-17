@@ -1,6 +1,9 @@
-#include "windows.h"
+ï»¿#include "windows.h"
 #include "winsock.h"
 #include "ISocket.h"
+#include "CExceptions.h"
+#include "TypeDef.h"
+#include <string>
 
 const int WINSOCK_VERSION = 0x202;
 //---------------------------------------------
@@ -43,7 +46,7 @@ SOCKADDR_IN Convert(const TConectionParms &aConParms)
    {
       hostent *lHost = gethostbyname(aConParms.mHostName.c_str());
       if (!lHost)
-         throw("Íåëüçÿ ðàñïîçíàòü àäðåñ");
+         throw socket_exception_w(L"ÐÐµÐ²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾ Ñ€Ð°ÑÐ¿Ð¾Ð·Ð½Ð°Ñ‚ÑŒ Ð°Ð´Ñ€ÐµÑ ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ");
       mAddr.sin_addr.s_addr = *(u_long *)(lHost->h_addr_list[0]);
    }
    mAddr.sin_port = htons(aConParms.mPort);
@@ -51,21 +54,32 @@ SOCKADDR_IN Convert(const TConectionParms &aConParms)
    return mAddr;
 }
 //---------------------------------------------
+TConectionParms Convert(const SOCKADDR_IN &aConParms)
+{
+   TConectionParms lAddr;
+   lAddr.mIP = inet_ntoa(aConParms.sin_addr);
+   lAddr.mPort = ntohs(aConParms.sin_port);
+   lAddr.mFamily = aConParms.sin_family;
+   return lAddr;
+}
+//---------------------------------------------
 class CSocket
    :public ISocket
 {
 public:
    explicit CSocket(const SOCKET &aSocket);
+   CSocket(const SOCKET &aSocket, const SOCKADDR_IN& aAdrr);
    explicit CSocket(const TConectionParms &aConParms);
    virtual ~CSocket();
    
-   virtual void Connect();
+   virtual bool Connect();
    virtual void Send(std::string aMessage);
    virtual bool Receive(char* aBuff, int aSize);
 
-   virtual void Bind();
+   virtual bool Bind();
    virtual void Listen(int aMaxConnection);
    virtual ISocket::Ptr Accept();
+   virtual TConectionParms GetParmsConnection();
 
 private:
     SOCKET mSocket;
@@ -74,6 +88,12 @@ private:
 
 CSocket::CSocket(const SOCKET &aSocket)
   :mSocket(aSocket)
+{
+   memset(&mConParms, 0, sizeof(mConParms));
+}
+
+CSocket::CSocket(const SOCKET &aSocket, const SOCKADDR_IN& aAdrr)
+: mSocket(aSocket), mConParms(aAdrr)
 {
 }
 
@@ -88,14 +108,14 @@ CSocket::~CSocket()
    closesocket(mSocket);
 }
 
-void CSocket::Connect()
+bool CSocket::Connect()
 {
-   connect(mSocket, (sockaddr *)&mConParms, sizeof(mConParms));
+   return !connect(mSocket, (sockaddr *)&mConParms, sizeof(mConParms));
 }
 
 void CSocket::Send(std::string aMessage)
 {
-   send(mSocket, aMessage.c_str(), strlen(aMessage.c_str()), 0);
+   send(mSocket, aMessage.c_str(), (int)strlen(aMessage.c_str()), 0);
 }
 
 bool CSocket::Receive(char* aBuff, int aSize)
@@ -106,9 +126,9 @@ bool CSocket::Receive(char* aBuff, int aSize)
    return !!size_recieved;
 }
 
-void CSocket::Bind()
+bool CSocket::Bind()
 {
-   bind(mSocket, (sockaddr *)&mConParms, sizeof(mConParms));
+   return !bind(mSocket, (sockaddr *)&mConParms, sizeof(mConParms));
 }
 
 void CSocket::Listen(int aMaxConnection)
@@ -118,11 +138,18 @@ void CSocket::Listen(int aMaxConnection)
 
 ISocket::Ptr CSocket::Accept()
 {
-   SOCKET lRetSocket = accept(mSocket, 0, 0);
+   SOCKADDR_IN accept_socket_addr;
+   int addrLen = sizeof(SOCKADDR_IN);
+   SOCKET lRetSocket = accept(mSocket, (SOCKADDR*)&accept_socket_addr, &addrLen);
    if (INVALID_SOCKET == lRetSocket)
       return ISocket::Ptr(NULL);
    else
-      return ISocket::Ptr(new CSocket(lRetSocket));
+      return ISocket::Ptr(new CSocket(lRetSocket, accept_socket_addr));
+}
+
+TConectionParms CSocket::GetParmsConnection()
+{
+   return Convert(mConParms);
 }
 
 ISocket::Ptr CreateWinSocket(const TConectionParms &aConParms)

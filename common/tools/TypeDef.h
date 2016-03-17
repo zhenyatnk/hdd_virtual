@@ -1,4 +1,4 @@
-#ifndef _I_TYPE_DEF_H_
+﻿#ifndef _I_TYPE_DEF_H_
 #define _I_TYPE_DEF_H_
 
 

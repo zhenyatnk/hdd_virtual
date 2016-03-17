@@ -1,8 +1,11 @@
-#ifndef _C_SERVICE_H_
+﻿#ifndef _C_SERVICE_H_
 #define _C_SERVICE_H_
 
 #include "./../../common/tools/ISocket.h"
+#include "./../../common/transport/CPartitionMeta.h"
 #include "./../../common/tools/IThread.h"
+#include "./../../common/tools/CExceptions.h"
+#include "./../../common/transport/CFormatDataTransport.h"
 //------------------------------------------------------------------------
 class CChanelClient
 	:public IThread
@@ -14,16 +17,24 @@ public:
 
 	virtual void Run()
 	{
-		char recvbuf[DEFAULT_BUFLEN];
-		int recvbuflen = DEFAULT_BUFLEN;
-		while (mSocketClient->Receive(recvbuf, recvbuflen))
+      printf("IP(%s:%d):\tConnect\n", mSocketClient->GetParmsConnection().mIP.c_str(), mSocketClient->GetParmsConnection().mPort);
+      TBuffer<DEFAULT_BUFLEN> lBuffer;
+      while (mSocketClient->Receive(lBuffer.GetData(), lBuffer.GetSize()))
 		{
-			printf(recvbuf);
-			memset(recvbuf, 0, DEFAULT_BUFLEN);
-			if (std::string(recvbuf) == "CLOSE")
+         printf("IP(%s:%d):\tECHO %s\n", mSocketClient->GetParmsConnection().mIP.c_str(), mSocketClient->GetParmsConnection().mPort, lBuffer.GetData());
+         std::string lString_buffer = lBuffer.ToString();
+         if (lString_buffer == CFormatDataTransport::command_close())
 				break;
-			mSocketClient->Send(std::string("TEST SEND TO CLIENT\n"));
-		}
+         else if (lString_buffer == CFormatDataTransport::command_get_object<CPartitionMeta>())
+         {
+            CPartitionMeta::Ptr lMeta(new CPartitionMeta(true, 1, 150));
+            mSocketClient->Send(CFormatDataTransport::command_value_object<ConverterToStr>(lMeta));
+         }
+         else
+            mSocketClient->Send(CFormatDataTransport::command_undefined());
+         lBuffer.Clear();
+      }
+      printf("IP(%s:%d):\tDisconnect\n", mSocketClient->GetParmsConnection().mIP.c_str(), mSocketClient->GetParmsConnection().mPort);
 	}
 private:
 	ISocket::Ptr mSocketClient;
@@ -52,7 +63,8 @@ private:
 		if (!mSocket)
 		{
 			mSocket = CreateWinSocket(mParmServer);
-			mSocket->Bind();
+         if (!mSocket->Bind())
+            throw socket_exception_w(GetMessageWithSocketError(L"Адрес недоступен."));
 		}
 		return mSocket;
 	}

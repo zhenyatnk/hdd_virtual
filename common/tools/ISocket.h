@@ -1,4 +1,4 @@
-#ifndef _I_SOCKET_H_
+﻿#ifndef _I_SOCKET_H_
 #define _I_SOCKET_H_
 
 #include <string>
@@ -6,7 +6,6 @@
 
 #define DEFAULT_BUFLEN 512
 #define NUMBER_PORT 25000
-
 //---------------------------------------------
 class ISocketInitializer
 {
@@ -40,13 +39,14 @@ public:
    virtual ~ISocket()
    {}
 
-   virtual void Connect() = 0;
+   virtual bool Connect() = 0;
    virtual void Send(std::string aMessage) = 0;
    virtual bool Receive(char* aBuff, int aSize) = 0;
 
-   virtual void Bind() = 0;
+   virtual bool Bind() = 0;
    virtual void Listen(int aMaxConnection) = 0;
    virtual ISocket::Ptr Accept() = 0;
+   virtual TConectionParms GetParmsConnection() = 0;
 };
 
 ISocket::Ptr CreateWinSocket(const TConectionParms &aConParms);

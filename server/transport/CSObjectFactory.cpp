@@ -1,4 +1,4 @@
-#include "CSObjectFactory.h"
+﻿#include "CSObjectFactory.h"
 #include "./../../common/tools/ISocket.h"
 
 class CServerFactory
@@ -7,23 +7,23 @@ class CServerFactory
    public:
    CServerFactory();
 
-   virtual IPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex);
-   virtual std::vector<IPartitionMeta::Ptr> CreatePartitionsMeta();
+   virtual CPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex);
+   virtual std::vector<CPartitionMeta::Ptr> CreatePartitionsMeta();
    
 };
 
 CServerFactory::CServerFactory()
 {}
 
-IPartitionMeta::Ptr CServerFactory::CreatePartitionMeta(UINT8 aIndex)
+CPartitionMeta::Ptr CServerFactory::CreatePartitionMeta(UINT8 aIndex)
 {
-   IPartitionMeta::Ptr lPartMeta;
+   CPartitionMeta::Ptr lPartMeta;
    return lPartMeta;
 }
 
-std::vector<IPartitionMeta::Ptr> CServerFactory::CreatePartitionsMeta()
+std::vector<CPartitionMeta::Ptr> CServerFactory::CreatePartitionsMeta()
 {
-   return std::vector<IPartitionMeta::Ptr>();
+   return std::vector<CPartitionMeta::Ptr>();
 }
 
 //----------------------------------------------------------------------------

@@ -15,9 +15,6 @@
     <ClInclude Include="transport\IObjectFactory.h">
       <Filter>Transport</Filter>
     </ClInclude>
-    <ClInclude Include="transport\IPartitionMeta.h">
-      <Filter>Transport</Filter>
-    </ClInclude>
     <ClInclude Include="tools\DSmartPtr.h">
       <Filter>Tools</Filter>
     </ClInclude>
@@ -30,6 +27,15 @@
     <ClInclude Include="tools\TypeDef.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="transport\CPartitionMeta.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="tools\CExceptions.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="transport\CFormatDataTransport.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tools\CSocket.cpp">
@@ -37,6 +43,15 @@
     </ClCompile>
     <ClCompile Include="tools\CThread.cpp">
       <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="transport\CPartitionMeta.cpp">
+      <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\CExceptions.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="transport\CFormatDataTransport.cpp">
+      <Filter>Transport</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

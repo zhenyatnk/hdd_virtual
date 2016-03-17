@@ -1,5 +1,7 @@
-#include "CCObjectFactory.h"
+﻿#include "CCObjectFactory.h"
 #include "./../../common/tools/ISocket.h"
+#include "./../../common/tools/CExceptions.h"
+#include "./../../common/transport/CFormatDataTransport.h"
 
 class CClientFactory
 	:public IObjectFactory
@@ -7,11 +9,28 @@ class CClientFactory
 public:
 	CClientFactory(TConectionParms aParmConnection);
 	~CClientFactory();
-	virtual IPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex);
-	virtual std::vector<IPartitionMeta::Ptr> CreatePartitionsMeta();
+	virtual CPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex);
+	virtual std::vector<CPartitionMeta::Ptr> CreatePartitionsMeta();
 
 private:
 	ISocket::Ptr GetSocket();
+
+   template <class TObject>
+   typename TObject::Ptr GetObjectPtr()
+   {
+      TBuffer<DEFAULT_BUFLEN> lBuffer;
+      TObject::Ptr lObject;
+      this->GetSocket()->Send(CFormatDataTransport::command_get_object<TObject>());
+      if (this->GetSocket()->Receive(lBuffer.GetData(), lBuffer.GetSize()))
+      {
+         printf("%s\n", lBuffer.GetData());
+         if (lBuffer.ToString() != CFormatDataTransport::command_error())
+         {
+            ;
+         }
+      }
+      return lObject;
+   }
 
 private:
 	ISocket::Ptr mClientSocket;
@@ -25,29 +44,17 @@ CClientFactory::CClientFactory(TConectionParms aParmConnection)
 CClientFactory::~CClientFactory()
 {
 	if (!!mClientSocket)
-		mClientSocket->Send("CLOSE");
+		mClientSocket->Send(CFormatDataTransport::command_close());
 }
 
-IPartitionMeta::Ptr CClientFactory::CreatePartitionMeta(UINT8 aIndex)
+CPartitionMeta::Ptr CClientFactory::CreatePartitionMeta(UINT8 aIndex)
 {
-	/*   this->GetSocket()->Send(std::string("GET ") + IPartitionMeta::GetNameObject());
-	   char recvbuf[DEFAULT_BUFLEN];
-	   int recvbuflen = DEFAULT_BUFLEN;
-	   if(this->GetSocket()->Receive(recvbuf, recvbuflen))
-	   lPartMeta = IPartitionMeta::LoadFromBuffer((UINT8*)recvbuf, recvbuflen);*/
-	this->GetSocket()->Send(std::string("TEST SEND TO SERVER\n"));
-	char recvbuf[DEFAULT_BUFLEN];
-	memset(recvbuf, 0, DEFAULT_BUFLEN);
-	int recvbuflen = DEFAULT_BUFLEN;
-	if (this->GetSocket()->Receive(recvbuf, recvbuflen))
-		printf(recvbuf);
-	IPartitionMeta::Ptr lPartMeta;
-	return lPartMeta;
+   return this->GetObjectPtr<CPartitionMeta>();
 }
 
-std::vector<IPartitionMeta::Ptr> CClientFactory::CreatePartitionsMeta()
+std::vector<CPartitionMeta::Ptr> CClientFactory::CreatePartitionsMeta()
 {
-	return std::vector<IPartitionMeta::Ptr>();
+	return std::vector<CPartitionMeta::Ptr>();
 }
 
 ISocket::Ptr CClientFactory::GetSocket()
@@ -55,7 +62,8 @@ ISocket::Ptr CClientFactory::GetSocket()
 	if (!mClientSocket)
 	{
 		mClientSocket = CreateWinSocket(mParmConnection);
-		mClientSocket->Connect();//TODO ошибка невозможно соединиться с сервером
+      if (!mClientSocket->Connect())
+         throw socket_exception_w(GetMessageWithSocketError(L"Сервер не отвечает."));
 	}
 	return mClientSocket;
 }

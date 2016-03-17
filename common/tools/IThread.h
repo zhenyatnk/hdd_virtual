@@ -1,4 +1,4 @@
-#ifndef _I_THREAD_H_
+﻿#ifndef _I_THREAD_H_
 #define _I_THREAD_H_
 
 #include "DSmartPtr.h"
