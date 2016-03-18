@@ -28,6 +28,8 @@ namespace UserInterface {
       void InitializeDefaultChanel(void);
       void InitializeComponent(void);
 
+      void ChangeParmsConnection();
+
    private:
       System::Windows::Forms::ListView^  lvHDDInfoListView;
       System::Windows::Forms::MenuStrip^  msTopMenuStrip;

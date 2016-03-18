@@ -3,6 +3,7 @@
 
 #include "Main_Form.h"
 #include "Connect_Form.h"
+#include "CConfig.h"
 
 namespace
 {
@@ -16,6 +17,7 @@ namespace UserInterface
    {
       InitializeComponent();
       InitializeDefaultChanel();
+      ChangeParmsConnection();
       ReloadInfoHDDToListView();
    }
 
@@ -34,13 +36,7 @@ namespace UserInterface
 
    System::Void Main_Form::smiParametersConnectionMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
    {
-      UserInterface::Connect_Form lFormConnect(gParm);
-      if (Windows::Forms::DialogResult::OK == lFormConnect.ShowDialog())
-      {
-         gParm = lFormConnect.GetParametersConnection();
-         gFactoryObject = NULL;
-         ReloadInfoHDDToListView();
-      }
+      ChangeParmsConnection();
    }
    void Main_Form::ReloadInfoHDDToListView()
    {
@@ -64,9 +60,22 @@ namespace UserInterface
 
    void Main_Form::InitializeDefaultChanel(void)
    {
-      gParm.mIP = "127.0.0.1";
+      gParm.mIP = CConfigForms::GetInstance().GetDefaultIP();
       gParm.mFamily = AF_INET;
-      gParm.mPort = NUMBER_PORT;
+      gParm.mPort = CConfigForms::GetInstance().GetDefaultPort();
+   }
+
+   void Main_Form::ChangeParmsConnection()
+   {
+      UserInterface::Connect_Form lFormConnect(gParm);
+      if (Windows::Forms::DialogResult::OK == lFormConnect.ShowDialog())
+      {
+         gParm = lFormConnect.GetParametersConnection();
+         CConfigForms::GetInstance().SetDefaultIP(gParm.mIP);
+         CConfigForms::GetInstance().SetDefaultPort(gParm.mPort);
+         gFactoryObject = NULL;
+         ReloadInfoHDDToListView();
+      }
    }
 
 #pragma region Windows Form Designer generated code

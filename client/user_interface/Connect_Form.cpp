@@ -118,7 +118,7 @@ namespace UserInterface
       this->bOk->Location = System::Drawing::Point(75, 3);
       this->bOk->Name = L"bOk";
       this->bOk->Size = System::Drawing::Size(75, 23);
-      this->bOk->TabIndex = 6;
+      this->bOk->TabIndex = 5;
       this->bOk->Text = L"OK";
       this->bOk->UseVisualStyleBackColor = true;
       // 
@@ -129,7 +129,7 @@ namespace UserInterface
       this->bCancel->Location = System::Drawing::Point(165, 3);
       this->bCancel->Name = L"bCancel";
       this->bCancel->Size = System::Drawing::Size(75, 23);
-      this->bCancel->TabIndex = 64;
+      this->bCancel->TabIndex = 6;
       this->bCancel->Text = L"Отмена";
       this->bCancel->UseVisualStyleBackColor = true;
       // 
@@ -161,7 +161,7 @@ namespace UserInterface
       this->nudNumberPort->Name = L"nudNumberPort";
       this->nudNumberPort->RightToLeft = System::Windows::Forms::RightToLeft::No;
       this->nudNumberPort->Size = System::Drawing::Size(206, 20);
-      this->nudNumberPort->TabIndex = 0;
+      this->nudNumberPort->TabIndex = 4;
       // 
       // gbIP
       // 
@@ -187,7 +187,7 @@ namespace UserInterface
       this->nudIP2->Name = L"nudIP2";
       this->nudIP2->RightToLeft = System::Windows::Forms::RightToLeft::No;
       this->nudIP2->Size = System::Drawing::Size(44, 20);
-      this->nudIP2->TabIndex = 0;
+      this->nudIP2->TabIndex = 1;
       // 
       // lDot1
       // 
@@ -225,7 +225,7 @@ namespace UserInterface
       this->nudIP3->Name = L"nudIP3";
       this->nudIP3->RightToLeft = System::Windows::Forms::RightToLeft::No;
       this->nudIP3->Size = System::Drawing::Size(44, 20);
-      this->nudIP3->TabIndex = 0;
+      this->nudIP3->TabIndex = 2;
       // 
       // lDot3
       // 
@@ -244,13 +244,14 @@ namespace UserInterface
       this->nudIP4->Name = L"nudIP4";
       this->nudIP4->RightToLeft = System::Windows::Forms::RightToLeft::No;
       this->nudIP4->Size = System::Drawing::Size(44, 20);
-      this->nudIP4->TabIndex = 0;
+      this->nudIP4->TabIndex = 3;
       // 
       // Connect_Form
       // 
       this->AcceptButton = this->bOk;
       this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
+      this->CancelButton = this->bCancel;
       this->ClientSize = System::Drawing::Size(254, 158);
       this->Controls->Add(this->tlMainTableLayot);
       this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedToolWindow;

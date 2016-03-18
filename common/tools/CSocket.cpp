@@ -40,12 +40,12 @@ SOCKADDR_IN Convert(const TConectionParms &aConParms)
    SOCKADDR_IN mAddr;
    memset(&mAddr, 0, sizeof(mAddr));
    mAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-   if (aConParms.mHostName.empty())
+   if (!aConParms.mIP.empty())
       mAddr.sin_addr.s_addr = inet_addr(aConParms.mIP.c_str());
-   else
+   else if (!aConParms.mHostName.empty())
    {
       hostent *lHost = gethostbyname(aConParms.mHostName.c_str());
-      if (!lHost)
+      if (!!lHost)
          throw socket_exception_w(L"Невозможно распознать адрес соединения");
       mAddr.sin_addr.s_addr = *(u_long *)(lHost->h_addr_list[0]);
    }

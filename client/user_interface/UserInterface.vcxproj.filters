@@ -38,6 +38,9 @@
     <ClCompile Include="Main_Form.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -50,6 +53,9 @@
       <Filter>Forms</Filter>
     </ClInclude>
     <ClInclude Include="Main_Form.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

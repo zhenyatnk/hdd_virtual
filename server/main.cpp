@@ -6,12 +6,12 @@ int main(int argc, char* argv[])
 {
    std::locale current_locale("");
    std::locale::global(current_locale);
-
    ISocketInitializer::Ptr lInit = CreateWinSocketInitializer();
+   
    TConectionParms lParm;
    lParm.mFamily = AF_INET;
-   lParm.mIP = "127.0.0.1";
    lParm.mPort = NUMBER_PORT;
+
    try
    {
       CService lServer(lParm);
