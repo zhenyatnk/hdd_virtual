@@ -1,7 +1,7 @@
 ﻿#include "CCObjectFactory.h"
-#include "./../../common/tools/ISocket.h"
-#include "./../../common/tools/CExceptions.h"
-#include "./../../common/transport/CFormatDataTransport.h"
+#include "./../../../common/tools/ISocket.h"
+#include "./../../../common/tools/CExceptions.h"
+#include "./../../../common/transport/CFormatDataTransport.h"
 
 class CClientFactory
 	:public IObjectFactory
