@@ -5,5 +5,6 @@
 #include "./../../../common/tools/ISocket.h"
 
 IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection);
+IObjectFactory* CreateClientFactoryNptr(TConectionParms aParmConnection);
 
 #endif

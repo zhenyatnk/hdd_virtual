@@ -72,3 +72,8 @@ IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection)
 {
    return IObjectFactory::Ptr(new CClientFactory(aParmConnection));
 }
+IObjectFactory* CreateClientFactoryNptr(TConectionParms aParmConnection)
+{
+	return new CClientFactory(aParmConnection);
+}
+
