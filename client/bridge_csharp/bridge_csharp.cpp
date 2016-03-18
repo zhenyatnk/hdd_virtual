@@ -1,8 +1,7 @@
 #include "stdafx.h"
 
+#include <msclr\marshal_cppstd.h>
 #include <string>
-#include <sstream>
-#include <msclr/marshal_cppstd.h>
 #include "bridge_csharp.h"
 
 namespace bridge_csharp
@@ -11,13 +10,17 @@ namespace bridge_csharp
 	{
 		TConectionParms ConvertTo(CREFConectionParms^ aParm)
 		{
+			System::String^ lStringHost = aParm->mHostName;
+			System::String^ lStringIP = aParm->mIP;
+
 			TConectionParms lParm;
 			lParm.mFamily = aParm->mFamily;
-/*			lParm.mHostName = msclr::interop::marshal_as<std::string>((aParm->mHostName);
-			lParm.mIP = msclr::interop::marshal_as<std::string>(aParm->mIP);
-*/			lParm.mPort = aParm->mPort;
+			lParm.mHostName = msclr::interop::marshal_as<std::string>(lStringHost);
+			lParm.mIP = msclr::interop::marshal_as<std::string>(lStringIP);
+			lParm.mPort = aParm->mPort;
 			return lParm;
 		}
+
 		CREFPartitionMeta^ ConvertTo(CPartitionMeta::Ptr aObj)
 		{
 			return gcnew CREFPartitionMeta(aObj->IsBoot(), aObj->GetTypePart(), aObj->GetSizeInSector());
@@ -49,11 +52,33 @@ namespace bridge_csharp
 	//-------------------------------------------------------------------------------
 
 	CREFFactoryObject::CREFFactoryObject(CREFConectionParms^ aParms)
+		:mParms(aParms), mObjectFactory(NULL)
+	{}
+
+	CREFFactoryObject::~CREFFactoryObject()
 	{
-		mObjectFactory = CreateClientFactoryNptr(Converters::ConvertTo(aParms));
+		if (!!mObjectFactory)
+			delete mObjectFactory;
 	}
+
 	CREFPartitionMeta^ CREFFactoryObject::CreatePartitionMeta(UInt16 aIndex)
 	{
-		return Converters::ConvertTo(mObjectFactory->CreatePartitionMeta(aIndex));
+		return Converters::ConvertTo(GetFactory()->CreatePartitionMeta(aIndex));
+	}
+
+	void CREFFactoryObject::CloseChannel()
+	{
+		if (!!mObjectFactory)
+		{
+			delete mObjectFactory;
+			mObjectFactory = NULL;
+		}
+	}
+
+	IObjectFactory* CREFFactoryObject::GetFactory()
+	{
+		if (!mObjectFactory)
+			mObjectFactory = CreateClientFactoryNptr(Converters::ConvertTo(mParms));
+		return mObjectFactory;
 	}
 };

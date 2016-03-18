@@ -36,8 +36,17 @@ namespace bridge_csharp
 	{
 	public:
 		CREFFactoryObject(CREFConectionParms^ aParms);
+		~CREFFactoryObject();
+
 		CREFPartitionMeta^ CreatePartitionMeta(UInt16 aIndex);
+
+		void CloseChannel();
+
+	private:
+		IObjectFactory* GetFactory();
+
 	private:
 		IObjectFactory* mObjectFactory;
+		CREFConectionParms^ mParms;
 	};
 }
