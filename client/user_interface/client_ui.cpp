@@ -1,7 +1,7 @@
 // UserInterface.cpp : main project file.
 
 #include "stdafx.h"
-#include "Form1.h"
+#include "Main_Form.h"
 
 using namespace UserInterface;
 
@@ -13,6 +13,6 @@ int main(array<System::String ^> ^args)
 	Application::SetCompatibleTextRenderingDefault(false); 
 
 	// Create the main window and run it
-	Application::Run(gcnew Form1());
+	Application::Run(gcnew Main_Form());
 	return 0;
 }

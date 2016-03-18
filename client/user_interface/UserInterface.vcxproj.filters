@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Forms">
+      <UniqueIdentifier>{d2b41d20-4d00-4985-810a-1932bd41d764}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.ico">
@@ -29,15 +32,24 @@
     <ClCompile Include="client_ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Connect_Form.cpp">
+      <Filter>Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="Main_Form.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Form1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Connect_Form.h">
+      <Filter>Forms</Filter>
+    </ClInclude>
+    <ClInclude Include="Main_Form.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -47,13 +59,13 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resX">
-      <Filter>Resource Files</Filter>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="..\..\..\..\hdd_icon.png">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Main_Form.resX">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
