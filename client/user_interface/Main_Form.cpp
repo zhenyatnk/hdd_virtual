@@ -36,7 +36,8 @@ namespace UserInterface
 
    System::Void Main_Form::smiParametersConnectionMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
    {
-      ChangeParmsConnection();
+      if(ChangeParmsConnection())
+         ReloadInfoHDDToListView();
    }
    void Main_Form::ReloadInfoHDDToListView()
    {
@@ -65,7 +66,7 @@ namespace UserInterface
       gParm.mPort = CConfigForms::GetInstance().GetDefaultPort();
    }
 
-   void Main_Form::ChangeParmsConnection()
+   bool Main_Form::ChangeParmsConnection()
    {
       UserInterface::Connect_Form lFormConnect(gParm);
       if (Windows::Forms::DialogResult::OK == lFormConnect.ShowDialog())
@@ -74,8 +75,9 @@ namespace UserInterface
          CConfigForms::GetInstance().SetDefaultIP(gParm.mIP);
          CConfigForms::GetInstance().SetDefaultPort(gParm.mPort);
          gFactoryObject = NULL;
-         ReloadInfoHDDToListView();
+         return true;
       }
+      return false;
    }
 
 #pragma region Windows Form Designer generated code

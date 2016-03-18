@@ -28,7 +28,7 @@ namespace UserInterface {
       void InitializeDefaultChanel(void);
       void InitializeComponent(void);
 
-      void ChangeParmsConnection();
+      bool ChangeParmsConnection();
 
    private:
       System::Windows::Forms::ListView^  lvHDDInfoListView;
