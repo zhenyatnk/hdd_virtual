@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../tools/transport/CCObjectFactory.h"
+
 namespace UserInterface {
 
    using namespace System;
@@ -19,7 +21,11 @@ namespace UserInterface {
       ~Main_Form();
 
    private:
+      IObjectFactory::Ptr GetFactoryObjects();
+
       System::Void smiParametersConnectionMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+      void ReloadInfoHDDToListView(void);
+      void InitializeDefaultChanel(void);
       void InitializeComponent(void);
 
    private:

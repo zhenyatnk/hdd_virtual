@@ -4,16 +4,16 @@
 #include "./../../../common/transport/CFormatDataTransport.h"
 
 class CClientFactory
-	:public IObjectFactory
+   :public IObjectFactory
 {
 public:
-	CClientFactory(TConectionParms aParmConnection);
-	~CClientFactory();
-	virtual CPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex);
-	virtual std::vector<CPartitionMeta::Ptr> CreatePartitionsMeta();
+   CClientFactory(TConectionParms aParmConnection);
+   ~CClientFactory();
+   virtual CPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex);
+   virtual std::vector<CPartitionMeta::Ptr> CreatePartitionsMeta();
 
 private:
-	ISocket::Ptr GetSocket();
+   ISocket::Ptr GetSocket();
 
    template <class TObject>
    typename TObject::Ptr GetObjectPtr()
@@ -31,18 +31,19 @@ private:
    }
 
 private:
-	ISocket::Ptr mClientSocket;
-	TConectionParms mParmConnection;
+   ISocket::Ptr mClientSocket;
+   TConectionParms mParmConnection;
+   ISocketInitializer::Ptr mInitSocket;
 };
 
 CClientFactory::CClientFactory(TConectionParms aParmConnection)
-:mParmConnection(aParmConnection)
+:mParmConnection(aParmConnection), mInitSocket(CreateWinSocketInitializer())
 {}
 
 CClientFactory::~CClientFactory()
 {
-	if (!!mClientSocket)
-		mClientSocket->Send(CFormatDataTransport::command_close());
+   if (!!mClientSocket)
+      mClientSocket->Send(CFormatDataTransport::command_close());
 }
 
 CPartitionMeta::Ptr CClientFactory::CreatePartitionMeta(UINT8 aIndex)
@@ -52,22 +53,22 @@ CPartitionMeta::Ptr CClientFactory::CreatePartitionMeta(UINT8 aIndex)
 
 std::vector<CPartitionMeta::Ptr> CClientFactory::CreatePartitionsMeta()
 {
-	return std::vector<CPartitionMeta::Ptr>();
+   return std::vector<CPartitionMeta::Ptr>();
 }
 
 ISocket::Ptr CClientFactory::GetSocket()
 {
-	if (!mClientSocket)
-	{
-		mClientSocket = CreateWinSocket(mParmConnection);
+   if (!mClientSocket)
+   {
+      mClientSocket = CreateWinSocket(mParmConnection);
       if (!mClientSocket->Connect())
          throw socket_exception_w(GetMessageWithSocketError(L"Сервер не отвечает."));
-	}
-	return mClientSocket;
+   }
+   return mClientSocket;
 }
 
 //----------------------------------------------------------------------------
 IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection)
 {
-	return IObjectFactory::Ptr(new CClientFactory(aParmConnection));
+   return IObjectFactory::Ptr(new CClientFactory(aParmConnection));
 }

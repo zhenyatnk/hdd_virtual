@@ -1,6 +1,7 @@
 #pragma once
+#include "./../../common/tools/ISocket.h"
 
-namespace UserInterface 
+namespace UserInterface
 {
 
    using namespace System;
@@ -10,16 +11,18 @@ namespace UserInterface
    using namespace System::Data;
    using namespace System::Drawing;
 
-   public ref class Connect_Form 
+   public ref class Connect_Form
       :public System::Windows::Forms::Form
    {
    public:
-      Connect_Form(void);
+      Connect_Form(TConectionParms aParmConnection);
+      TConectionParms GetParametersConnection();
 
    protected:
       ~Connect_Form();
 
    private:
+      void InitValueControls(TConectionParms aParmConnection);
       void InitializeComponent(void);
 
    private:
@@ -27,6 +30,23 @@ namespace UserInterface
       System::Windows::Forms::TableLayoutPanel^  tlBottomTableLayout;
       System::Windows::Forms::Button^  bOk;
       System::Windows::Forms::Button^  bCancel;
+      System::Windows::Forms::Panel^  pnPanelParameters;
+      System::Windows::Forms::GroupBox^  gbPort;
+      System::Windows::Forms::GroupBox^  gbIP;
+      System::Windows::Forms::NumericUpDown^  nudIP1;
+   private: System::Windows::Forms::NumericUpDown^  nudNumberPort;
+
+   private: System::Windows::Forms::NumericUpDown^  nudIP2;
+   private: System::Windows::Forms::NumericUpDown^  nudIP3;
+   private: System::Windows::Forms::NumericUpDown^  nudIP4;
+
+
+
+
+
+      System::Windows::Forms::Label^  lDot1;
+      System::Windows::Forms::Label^  lDot2;
+      System::Windows::Forms::Label^  lDot3;
       System::ComponentModel::Container ^components;
    };
 }

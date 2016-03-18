@@ -1,12 +1,22 @@
 #include "stdafx.h"
+#include "winsock.h"
+
 #include "Main_Form.h"
 #include "Connect_Form.h"
+
+namespace
+{
+   TConectionParms gParm;
+   IObjectFactory::Ptr gFactoryObject;
+}
 
 namespace UserInterface
 {
    Main_Form::Main_Form(void)
    {
       InitializeComponent();
+      InitializeDefaultChanel();
+      ReloadInfoHDDToListView();
    }
 
    Main_Form::~Main_Form()
@@ -15,11 +25,48 @@ namespace UserInterface
          delete components;
    }
 
+   IObjectFactory::Ptr Main_Form::GetFactoryObjects()
+   {
+      if (!gFactoryObject)
+         gFactoryObject = CreateClientFactory(gParm);
+      return gFactoryObject;
+   }
+
    System::Void Main_Form::smiParametersConnectionMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
    {
-      UserInterface::Connect_Form lFormConnect;
+      UserInterface::Connect_Form lFormConnect(gParm);
       if (Windows::Forms::DialogResult::OK == lFormConnect.ShowDialog())
-         ;
+      {
+         gParm = lFormConnect.GetParametersConnection();
+         gFactoryObject = NULL;
+         ReloadInfoHDDToListView();
+      }
+   }
+   void Main_Form::ReloadInfoHDDToListView()
+   {
+      try
+      {
+         lvHDDInfoListView->Items->Clear();
+         CPartitionMeta::Ptr lHDDMeta = GetFactoryObjects()->CreatePartitionMeta(0);
+         ListViewItem ^lHDDInfo = gcnew ListViewItem("HDD0");
+         if (lHDDMeta->IsBoot())  lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, "*"));
+         else                     lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, ""));
+         lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)lHDDMeta->GetSizeInSector())));
+         lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)lHDDMeta->GetTypePart())));
+         lvHDDInfoListView->Items->Add(lHDDInfo);
+      }
+      catch (System::Object^ e)
+      {
+         e->ToString();
+         this->Close();
+      }
+   }
+
+   void Main_Form::InitializeDefaultChanel(void)
+   {
+      gParm.mIP = "127.0.0.1";
+      gParm.mFamily = AF_INET;
+      gParm.mPort = NUMBER_PORT;
    }
 
 #pragma region Windows Form Designer generated code
