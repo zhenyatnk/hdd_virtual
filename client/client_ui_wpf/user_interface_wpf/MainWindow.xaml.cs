@@ -13,16 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace user_interface_wpf
+namespace client_wpf
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
-            InitializeComponent();
             bridge_csharp.CREFConectionParms lParms = new bridge_csharp.CREFConectionParms();
             lParms.mPort = 25000;
             lParms.mIP = "127.0.0.1";
@@ -30,6 +26,11 @@ namespace user_interface_wpf
             bridge_csharp.CREFFactoryObject lFactor = new bridge_csharp.CREFFactoryObject(lParms);
             bridge_csharp.CREFPartitionMeta lPartMeta = lFactor.CreatePartitionMeta(1);
             lFactor.CloseChannel();
+        }
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ConectSettings.MainWindow lForms = new ConectSettings.MainWindow();
+            lForms.ShowDialog();
         }
     }
 }
