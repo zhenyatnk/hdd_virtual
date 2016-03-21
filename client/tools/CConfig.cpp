@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <fstream>
 #include "Windows.h"
 #include "..\..\common\tools\ISocket.h"

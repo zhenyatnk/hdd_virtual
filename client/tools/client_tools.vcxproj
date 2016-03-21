@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="transport\CCObjectFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CConfig.h" />
     <ClInclude Include="transport\CCObjectFactory.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

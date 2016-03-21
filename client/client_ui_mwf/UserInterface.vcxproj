@@ -162,7 +162,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
-    <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="Connect_Form.cpp" />
     <ClCompile Include="Main_Form.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -174,7 +173,6 @@
     <ClCompile Include="client_ui.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CConfig.h" />
     <ClInclude Include="Connect_Form.h">
       <FileType>CppForm</FileType>
     </ClInclude>

@@ -3,11 +3,27 @@
 #include <msclr\marshal_cppstd.h>
 #include <string>
 #include "bridge_csharp.h"
+#include "../../tools/CConfig.h"
 
 namespace bridge_csharp
 {
 	namespace Converters
 	{
+		CREFPartitionMeta^ ConvertTo(CPartitionMeta::Ptr aObj)
+		{
+			return gcnew CREFPartitionMeta(aObj->IsBoot(), aObj->GetTypePart(), aObj->GetSizeInSector());
+		}
+
+		System::String^ ConvertTo(std::string aStr)
+		{
+			return gcnew System::String(aStr.c_str());
+		}
+
+		std::string ConvertTo(System::String^ aStr)
+		{
+			return msclr::interop::marshal_as<std::string>(aStr);
+		}
+
 		TConectionParms ConvertTo(CREFConectionParms^ aParm)
 		{
 			System::String^ lStringHost = aParm->mHostName;
@@ -15,15 +31,10 @@ namespace bridge_csharp
 
 			TConectionParms lParm;
 			lParm.mFamily = aParm->mFamily;
-			lParm.mHostName = msclr::interop::marshal_as<std::string>(lStringHost);
-			lParm.mIP = msclr::interop::marshal_as<std::string>(lStringIP);
+			lParm.mHostName = ConvertTo(lStringHost);
+			lParm.mIP = ConvertTo(lStringIP);
 			lParm.mPort = aParm->mPort;
 			return lParm;
-		}
-
-		CREFPartitionMeta^ ConvertTo(CPartitionMeta::Ptr aObj)
-		{
-			return gcnew CREFPartitionMeta(aObj->IsBoot(), aObj->GetTypePart(), aObj->GetSizeInSector());
 		}
 	}
 	//-------------------------------------------------------------------------------
@@ -80,5 +91,25 @@ namespace bridge_csharp
 		if (!mObjectFactory)
 			mObjectFactory = CreateClientFactoryNptr(Converters::ConvertTo(mParms));
 		return mObjectFactory;
+	}
+
+	System::String^ CREFConfigFile::GetDefaultIP()
+	{
+		return Converters::ConvertTo(CConfigForms::GetInstance().GetDefaultIP());
+	}
+
+	Int32 CREFConfigFile::GetDefaultPort()
+	{
+		return CConfigForms::GetInstance().GetDefaultPort();
+	}
+
+	void CREFConfigFile::SetDefaultIP(System::String^ aIP)
+	{
+		CConfigForms::GetInstance().SetDefaultIP(Converters::ConvertTo(aIP));
+	}
+
+	void CREFConfigFile::SetDefaultPort(Int32 aPort)
+	{
+		CConfigForms::GetInstance().SetDefaultPort(aPort);
 	}
 };

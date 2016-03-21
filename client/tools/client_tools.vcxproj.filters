@@ -15,9 +15,15 @@
     <ClInclude Include="transport\CCObjectFactory.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="CConfig.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="transport\CCObjectFactory.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="CConfig.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>

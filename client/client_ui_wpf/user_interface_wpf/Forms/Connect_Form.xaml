@@ -1,30 +1,32 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="ConectSettings.MainWindow"
-        Height="184.334" Width="184.333" ResizeMode="NoResize" Title="Параметры подключения">
-	<Grid Margin="0,0,4,0">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="59"/>
-			<RowDefinition/>
-			<RowDefinition Height="36"/>
-		</Grid.RowDefinitions>
-		<GroupBox Header="IP адрес сервера" Margin="5,0,5,0" Grid.Row="0">
-			<DockPanel LastChildFill="False" Margin="0,0,0,0">
-				<TextBox Height="23" TextWrapping="Wrap" Margin="5,8,0,0" Text="255" TextAlignment="Center" VerticalAlignment="Top" Width="25.5"/>
-				<Label Content="." Margin="0,8,0,0" Height="23" VerticalAlignment="Top"/>
-				<TextBox Height="23" TextWrapping="Wrap" Margin="0,8,0,0" Text="255" TextAlignment="Center" VerticalAlignment="Top" Width="25.5"/>
-				<Label Content="." Margin="0,8,0,0" Height="23" VerticalAlignment="Top"/>
-				<TextBox Height="23" TextWrapping="Wrap" Margin="0,8,0,0" Text="255" TextAlignment="Center" VerticalAlignment="Top" Width="25.5"/>
-				<Label Content="." Margin="0,8,0,0" Height="23" VerticalAlignment="Top"/>
-				<TextBox Height="23" TextWrapping="Wrap" Margin="0,8,0,0" Text="255" TextAlignment="Center" VerticalAlignment="Top" Width="25.5"/>
-			</DockPanel>
-		</GroupBox>
-		<GroupBox Header="Порт подключения" Margin="5,0,5,0" Grid.Row="1">
-			<DockPanel LastChildFill="False" Margin="0,0,0,0">
-				<TextBox Height="23" TextWrapping="Wrap" Margin="5,8,0,0" Text="25000" TextAlignment="left" VerticalAlignment="Top" Width="142.077"/>
-			</DockPanel>
-		</GroupBox>
-		<Button Content="OK" Margin="0,8.02,81.331,8.02" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Height="19.96"/>
-		<Button Content="Cancel" Margin="0,8.02,7.331,8.02" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Height="19.96"/>
-	</Grid>
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
+        x:Class="ConectSettings.MainWindow"
+        xmlns:usr_control="clr-namespace:eisiWare;assembly=NumericUpDown"
+        Height="188.334" Width="192.333" ResizeMode="NoResize" Title="Параметры подключения">
+    <Grid Margin="0,0,4,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="59"/>
+            <RowDefinition/>
+            <RowDefinition Height="36"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="IP адрес сервера" Margin="5,0,5,0" Grid.Row="0">
+            <DockPanel LastChildFill="False" Margin="0,0,0,0">
+                <usr_control:NumericUpDown x:Name="IP1" ShowButtons="False" MaxValue="255" MinValue="0" Margin="5,0,0,0" HorizontalAlignment="Center" Width="25.5"/>
+                <Label Content="." Margin="0,8,0,0" Height="23" VerticalAlignment="Top"/>
+                <usr_control:NumericUpDown x:Name="IP2" ShowButtons="False" MaxValue="255" MinValue="0" Margin="0,0,0,0" HorizontalAlignment="Center" Width="25.5"/>
+                <Label Content="." Margin="0,8,0,0" Height="23" VerticalAlignment="Top"/>
+                <usr_control:NumericUpDown x:Name="IP3" ShowButtons="False" MaxValue="255" MinValue="0" Margin="0,0,0,0" HorizontalAlignment="Center" Width="25.5"/>
+                <Label Content="." Margin="0,8,0,0" Height="23" VerticalAlignment="Top"/>
+                <usr_control:NumericUpDown x:Name="IP4" ShowButtons="False" MaxValue="255" MinValue="0" Margin="0,0,0,0" HorizontalAlignment="Center" Width="25.5"/>
+            </DockPanel>
+        </GroupBox>
+        <GroupBox Header="Порт подключения" Margin="5,0,5,0" Grid.Row="1">
+            <DockPanel LastChildFill="False" Margin="0,0,0,0">
+                <usr_control:NumericUpDown x:Name="Port" ShowButtons="False" Margin="5,0,0,0" MaxValue="32000" MinValue="0" HorizontalAlignment="Center" Width="142"/>
+            </DockPanel>
+        </GroupBox>
+        <Button Content="OK" Margin="0,8.02,81.331,8.02" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Height="19.96" IsDefault="True" Click="button_OK_Click"/>
+        <Button Content="Cancel" Margin="0,8.02,7.331,8.02" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Height="19.96" IsCancel="True" Click="button_Cancel_Click"/>
+    </Grid>
 </Window>

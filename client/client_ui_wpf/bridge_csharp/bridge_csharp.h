@@ -49,4 +49,14 @@ namespace bridge_csharp
 		IObjectFactory* mObjectFactory;
 		CREFConectionParms^ mParms;
 	};
+
+	public ref class CREFConfigFile
+	{
+	public:
+		System::String^ GetDefaultIP();
+		Int32 GetDefaultPort();
+
+		void SetDefaultIP(System::String^ aIP);
+		void SetDefaultPort(Int32 aPort);
+	};
 }

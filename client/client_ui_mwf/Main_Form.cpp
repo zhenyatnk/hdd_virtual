@@ -3,7 +3,7 @@
 
 #include "Main_Form.h"
 #include "Connect_Form.h"
-#include "CConfig.h"
+#include "../tools/CConfig.h"
 
 namespace
 {

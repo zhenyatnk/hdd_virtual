@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using bridge_csharp;
 
 namespace client_wpf
 {
@@ -19,18 +20,81 @@ namespace client_wpf
     {
         public MainWindow()
         {
-            bridge_csharp.CREFConectionParms lParms = new bridge_csharp.CREFConectionParms();
-            lParms.mPort = 25000;
-            lParms.mIP = "127.0.0.1";
-            lParms.mFamily = 2;
-            bridge_csharp.CREFFactoryObject lFactor = new bridge_csharp.CREFFactoryObject(lParms);
-            bridge_csharp.CREFPartitionMeta lPartMeta = lFactor.CreatePartitionMeta(1);
-            lFactor.CloseChannel();
+            InitializeDefaultChanel();
+            if (!ChangeParmsConnection())
+                mFactoryObject = new CREFFactoryObject(mParmConnection);
+            ReloadInfoHDDToListView();
+            InitializeComponent();
         }
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            ConectSettings.MainWindow lForms = new ConectSettings.MainWindow();
-            lForms.ShowDialog();
+            if (ChangeParmsConnection())
+            {
+                ReloadInfoHDDToListView();
+            }
         }
+        private bool ChangeParmsConnection()
+        {
+            ConectSettings.MainWindow lForm = new ConectSettings.MainWindow(mParmConnection);
+            bool? lStat = lForm.ShowDialog();
+            if (true == lStat)
+            {
+                mParmConnection = lForm.GetParametersConnection();
+                mConfigFile.SetDefaultIP(mParmConnection.mIP);
+                mConfigFile.SetDefaultPort(mParmConnection.mPort);
+                mFactoryObject = new CREFFactoryObject(mParmConnection);
+            }
+            return true == lStat;
+        }
+        private void InitializeDefaultChanel()
+        {
+            mConfigFile = new CREFConfigFile();
+            mParmConnection = new CREFConectionParms();
+            mParmConnection.mIP = mConfigFile.GetDefaultIP();
+            mParmConnection.mPort = mConfigFile.GetDefaultPort();
+            mParmConnection.mFamily = 2;
+        }
+        private void ReloadInfoHDDToListView()
+        {
+           try
+           {
+               CREFPartitionMeta lHDDMeta = mFactoryObject.CreatePartitionMeta(0);
+                        HDDInfo = new List<ListHDDElement>() ;
+               ListHDDElement lHDD = new ListHDDElement();
+               lHDD.Name = "HDD";
+               if(lHDDMeta.IsBoot())   lHDD.Bootbale = "*";
+               else                    lHDD.Bootbale = "";
+               lHDD.Size = lHDDMeta.GetSizeInSector();
+               lHDD.Type = lHDDMeta.GetTypePart();
+               HDDInfo.Add(lHDD);
+               this.DataContext = this;
+           }
+           catch
+           {
+              Close();
+           }
+        }
+
+        public class ListHDDElement
+        {
+            public string Name { get; set; }
+            public string Bootbale { get; set; }
+            public uint Size { get; set; }
+            public ushort Type { get; set; }
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(mFactoryObject != null)
+            {
+                mFactoryObject.CloseChannel();
+            }
+        }
+
+        public IList<ListHDDElement> HDDInfo { get; set; }
+
+        private CREFFactoryObject mFactoryObject;
+        private CREFConfigFile mConfigFile;
+        private CREFConectionParms mParmConnection;
+
     }
 }
