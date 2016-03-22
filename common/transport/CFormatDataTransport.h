@@ -23,6 +23,11 @@ public:
       return "ERROR";
    }
 
+   static std::string command_wait()
+   {
+      return "WAIT";
+   }
+
    static std::string command_undefined()
    {
       return "UNDEFINED COMMAND";

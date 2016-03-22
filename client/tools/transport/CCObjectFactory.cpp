@@ -35,11 +35,16 @@ private:
       TBuffer<DEFAULT_BUFLEN> lBuffer;
       std::vector<typename TObject::Ptr> lContainerObjects;
       this->GetSocket()->Send(CFormatDataTransport::command_get_object_list<TObject>());
-      if (this->GetSocket()->Receive(lBuffer.GetData(), lBuffer.GetSize()))
+      while (this->GetSocket()->Receive(lBuffer.GetData(), lBuffer.GetSize()) && 
+             lBuffer.ToString() != CFormatDataTransport::command_error() && 
+             lBuffer.ToString() != CFormatDataTransport::command_close())
       {
          printf("%s\n", lBuffer.GetData());
-         if (lBuffer.ToString() != CFormatDataTransport::command_error())
-            lContainerObjects = ConverterFromStr::ConvertToList<TObject>(lBuffer.ToString());
+         std::vector<typename TObject::Ptr> lPartObjects = ConverterFromStr::ConvertToList<TObject>(lBuffer.ToString());
+         for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lPartObjects.begin(); lIterator != lPartObjects.end(); ++lIterator)
+            lContainerObjects.push_back(*lIterator);
+         this->GetSocket()->Send(CFormatDataTransport::command_wait());
+         lBuffer.Clear();
       }
       return lContainerObjects;
    }
