@@ -6,57 +6,58 @@ using namespace System;
 
 namespace bridge_csharp
 {
-	public ref class CREFConectionParms
-	{
-	public:
-		CREFConectionParms();
+   public ref class CREFConectionParms
+   {
+   public:
+      CREFConectionParms();
 
-		System::String^ mHostName;
-		System::String^ mIP;
-		Int32 mPort;
-		UInt16 mFamily;
-	};
+      System::String^ mHostName;
+      System::String^ mIP;
+      Int32 mPort;
+      UInt16 mFamily;
+   };
 
-	public ref class CREFPartitionMeta
-	{
-	public:
-		CREFPartitionMeta(bool aIsBoot, UInt16 aType, UInt32 aSize);
+   public ref class CREFPartitionMeta
+   {
+   public:
+      CREFPartitionMeta(bool aIsBoot, UInt16 aType, UInt32 aSize);
 
-		bool IsBoot();
-		UInt16 GetTypePart();
-		UInt32 GetSizeInSector();
+      bool IsBoot();
+      UInt16 GetTypePart();
+      UInt32 GetSizeInSector();
 
-	private:
-		bool mIsBoot;
-		UInt16 mType;
-		UInt32 mSize;
-	};
+   private:
+      bool mIsBoot;
+      UInt16 mType;
+      UInt32 mSize;
+   };
 
-	public ref class CREFFactoryObject
-	{
-	public:
-		CREFFactoryObject(CREFConectionParms^ aParms);
-		~CREFFactoryObject();
+   public ref class CREFFactoryObject
+   {
+   public:
+      CREFFactoryObject(CREFConectionParms^ aParms);
+      ~CREFFactoryObject();
 
-		CREFPartitionMeta^ CreatePartitionMeta(UInt16 aIndex);
+      CREFPartitionMeta^ CreatePartitionMeta(UInt16 aIndex);
+      System::Collections::ArrayList^ CreatePartitionsMeta();
 
-		void CloseChannel();
+      void CloseChannel();
 
-	private:
-		IObjectFactory* GetFactory();
+   private:
+      IObjectFactory* GetFactory();
 
-	private:
-		IObjectFactory* mObjectFactory;
-		CREFConectionParms^ mParms;
-	};
+   private:
+      IObjectFactory* mObjectFactory;
+      CREFConectionParms^ mParms;
+   };
 
-	public ref class CREFConfigFile
-	{
-	public:
-		System::String^ GetDefaultIP();
-		Int32 GetDefaultPort();
+   public ref class CREFConfigFile
+   {
+   public:
+      System::String^ GetDefaultIP();
+      Int32 GetDefaultPort();
 
-		void SetDefaultIP(System::String^ aIP);
-		void SetDefaultPort(Int32 aPort);
-	};
+      void SetDefaultIP(System::String^ aIP);
+      void SetDefaultPort(Int32 aPort);
+   };
 }

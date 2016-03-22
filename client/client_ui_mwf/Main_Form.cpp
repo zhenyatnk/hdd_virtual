@@ -36,7 +36,7 @@ namespace UserInterface
 
    System::Void Main_Form::smiParametersConnectionMenuItem_Click(System::Object^  sender, System::EventArgs^  e)
    {
-      if(ChangeParmsConnection())
+      if (ChangeParmsConnection())
          ReloadInfoHDDToListView();
    }
    void Main_Form::ReloadInfoHDDToListView()
@@ -44,13 +44,16 @@ namespace UserInterface
       try
       {
          lvHDDInfoListView->Items->Clear();
-         CPartitionMeta::Ptr lHDDMeta = GetFactoryObjects()->CreatePartitionMeta(0);
-         ListViewItem ^lHDDInfo = gcnew ListViewItem("HDD0");
-         if (lHDDMeta->IsBoot())  lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, "*"));
-         else                     lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, ""));
-         lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)lHDDMeta->GetSizeInSector())));
-         lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)lHDDMeta->GetTypePart())));
-         lvHDDInfoListView->Items->Add(lHDDInfo);
+         std::vector<CPartitionMeta::Ptr> lHDDMetas = GetFactoryObjects()->CreatePartitionsMeta();
+         for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lHDDMetas.begin(); lIterator != lHDDMetas.end(); ++lIterator)
+         {
+            ListViewItem ^lHDDInfo = gcnew ListViewItem("HDD");
+            if ((*lIterator)->IsBoot())  lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, "*"));
+            else                     lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, ""));
+            lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)(*lIterator)->GetSizeInSector())));
+            lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)(*lIterator)->GetTypePart())));
+            lvHDDInfoListView->Items->Add(lHDDInfo);
+         }
       }
       catch (System::Object^ e)
       {
@@ -84,14 +87,6 @@ namespace UserInterface
    void Main_Form::InitializeComponent(void)
    {
       this->components = (gcnew System::ComponentModel::Container());
-      System::Windows::Forms::ListViewItem^  listViewItem1 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(4) {
-         L"HDD0",
-            L"*", L"150.5", L"NTFS"
-      }, 0));
-      System::Windows::Forms::ListViewItem^  listViewItem2 = (gcnew System::Windows::Forms::ListViewItem(gcnew cli::array< System::String^  >(4) {
-         L"HDD1",
-            L"", L"51.4", L"FAT32"
-      }, 0));
       System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Main_Form::typeid));
       this->lvHDDInfoListView = (gcnew System::Windows::Forms::ListView());
       this->chHeader_HddLabel = (gcnew System::Windows::Forms::ColumnHeader());
@@ -120,7 +115,6 @@ namespace UserInterface
             this->chHeader_Size, this->chHeader_FileSystem
       });
       this->lvHDDInfoListView->Dock = System::Windows::Forms::DockStyle::Fill;
-      this->lvHDDInfoListView->Items->AddRange(gcnew cli::array< System::Windows::Forms::ListViewItem^  >(2) { listViewItem1, listViewItem2 });
       this->lvHDDInfoListView->LargeImageList = this->imageList1;
       this->lvHDDInfoListView->Location = System::Drawing::Point(0, 0);
       this->lvHDDInfoListView->Name = L"lvHDDInfoListView";

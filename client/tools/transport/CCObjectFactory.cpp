@@ -16,7 +16,7 @@ private:
    ISocket::Ptr GetSocket();
 
    template <class TObject>
-   typename TObject::Ptr GetObjectPtr()
+   typename TObject::Ptr GetObject()
    {
       TBuffer<DEFAULT_BUFLEN> lBuffer;
       TObject::Ptr lObject;
@@ -29,6 +29,21 @@ private:
       }
       return lObject;
    }
+   template <class TObject>
+   std::vector<typename TObject::Ptr> GetContainerObjects()
+   {
+      TBuffer<DEFAULT_BUFLEN> lBuffer;
+      std::vector<typename TObject::Ptr> lContainerObjects;
+      this->GetSocket()->Send(CFormatDataTransport::command_get_object_list<TObject>());
+      if (this->GetSocket()->Receive(lBuffer.GetData(), lBuffer.GetSize()))
+      {
+         printf("%s\n", lBuffer.GetData());
+         if (lBuffer.ToString() != CFormatDataTransport::command_error())
+            lContainerObjects = ConverterFromStr::ConvertToList<TObject>(lBuffer.ToString());
+      }
+      return lContainerObjects;
+   }
+
 
 private:
    ISocket::Ptr mClientSocket;
@@ -48,12 +63,12 @@ CClientFactory::~CClientFactory()
 
 CPartitionMeta::Ptr CClientFactory::CreatePartitionMeta(UINT8 aIndex)
 {
-   return this->GetObjectPtr<CPartitionMeta>();
+   return this->GetObject<CPartitionMeta>();
 }
 
 std::vector<CPartitionMeta::Ptr> CClientFactory::CreatePartitionsMeta()
 {
-   return std::vector<CPartitionMeta::Ptr>();
+   return this->GetContainerObjects<CPartitionMeta>();
 }
 
 ISocket::Ptr CClientFactory::GetSocket()
@@ -74,6 +89,6 @@ IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection)
 }
 IObjectFactory* CreateClientFactoryNptr(TConectionParms aParmConnection)
 {
-	return new CClientFactory(aParmConnection);
+   return new CClientFactory(aParmConnection);
 }
 

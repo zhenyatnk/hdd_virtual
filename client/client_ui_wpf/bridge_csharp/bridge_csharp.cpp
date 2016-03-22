@@ -7,109 +7,123 @@
 
 namespace bridge_csharp
 {
-	namespace Converters
-	{
-		CREFPartitionMeta^ ConvertTo(CPartitionMeta::Ptr aObj)
-		{
-			return gcnew CREFPartitionMeta(aObj->IsBoot(), aObj->GetTypePart(), aObj->GetSizeInSector());
-		}
+   namespace Converters
+   {
+      CREFPartitionMeta^ ConvertTo(CPartitionMeta::Ptr aObj)
+      {
+         return gcnew CREFPartitionMeta(aObj->IsBoot(), aObj->GetTypePart(), aObj->GetSizeInSector());
+      }
 
-		System::String^ ConvertTo(std::string aStr)
-		{
-			return gcnew System::String(aStr.c_str());
-		}
+      System::Collections::ArrayList^ ConvertTo(std::vector<CPartitionMeta::Ptr> aContainerObjs)
+      {
+         System::Collections::ArrayList^ lManagedContainerMeta = gcnew System::Collections::ArrayList;
+         for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = aContainerObjs.begin(); lIterator != aContainerObjs.end(); ++lIterator)
+            lManagedContainerMeta->Add(Converters::ConvertTo(*lIterator));
+         return lManagedContainerMeta;
 
-		std::string ConvertTo(System::String^ aStr)
-		{
-			return msclr::interop::marshal_as<std::string>(aStr);
-		}
+      }
 
-		TConectionParms ConvertTo(CREFConectionParms^ aParm)
-		{
-			System::String^ lStringHost = aParm->mHostName;
-			System::String^ lStringIP = aParm->mIP;
+      System::String^ ConvertTo(std::string aStr)
+      {
+         return gcnew System::String(aStr.c_str());
+      }
 
-			TConectionParms lParm;
-			lParm.mFamily = aParm->mFamily;
-			lParm.mHostName = ConvertTo(lStringHost);
-			lParm.mIP = ConvertTo(lStringIP);
-			lParm.mPort = aParm->mPort;
-			return lParm;
-		}
-	}
-	//-------------------------------------------------------------------------------
-	CREFConectionParms::CREFConectionParms()
-		:mHostName(""), mIP(""), mPort(0), mFamily(0)
-	{}
-	//-------------------------------------------------------------------------------
-	CREFPartitionMeta::CREFPartitionMeta(bool aIsBoot, UInt16 aType, UInt32 aSize)
-		: mIsBoot(aIsBoot), mType(aType), mSize(aSize)
-	{}
+      std::string ConvertTo(System::String^ aStr)
+      {
+         return msclr::interop::marshal_as<std::string>(aStr);
+      }
 
-	bool CREFPartitionMeta::IsBoot()
-	{
-		return mIsBoot;
-	}
+      TConectionParms ConvertTo(CREFConectionParms^ aParm)
+      {
+         System::String^ lStringHost = aParm->mHostName;
+         System::String^ lStringIP = aParm->mIP;
 
-	UInt16 CREFPartitionMeta::GetTypePart()
-	{
-		return mType;
-	}
+         TConectionParms lParm;
+         lParm.mFamily = aParm->mFamily;
+         lParm.mHostName = ConvertTo(lStringHost);
+         lParm.mIP = ConvertTo(lStringIP);
+         lParm.mPort = aParm->mPort;
+         return lParm;
+      }
+   }
+   //-------------------------------------------------------------------------------
+   CREFConectionParms::CREFConectionParms()
+      :mHostName(""), mIP(""), mPort(0), mFamily(0)
+   {}
+   //-------------------------------------------------------------------------------
+   CREFPartitionMeta::CREFPartitionMeta(bool aIsBoot, UInt16 aType, UInt32 aSize)
+      : mIsBoot(aIsBoot), mType(aType), mSize(aSize)
+   {}
 
-	UInt32 CREFPartitionMeta::GetSizeInSector()
-	{
-		return mSize;
-	}
-	//-------------------------------------------------------------------------------
+   bool CREFPartitionMeta::IsBoot()
+   {
+      return mIsBoot;
+   }
 
-	CREFFactoryObject::CREFFactoryObject(CREFConectionParms^ aParms)
-		:mParms(aParms), mObjectFactory(NULL)
-	{}
+   UInt16 CREFPartitionMeta::GetTypePart()
+   {
+      return mType;
+   }
 
-	CREFFactoryObject::~CREFFactoryObject()
-	{
-		if (!!mObjectFactory)
-			delete mObjectFactory;
-	}
+   UInt32 CREFPartitionMeta::GetSizeInSector()
+   {
+      return mSize;
+   }
+   //-------------------------------------------------------------------------------
 
-	CREFPartitionMeta^ CREFFactoryObject::CreatePartitionMeta(UInt16 aIndex)
-	{
-		return Converters::ConvertTo(GetFactory()->CreatePartitionMeta(aIndex));
-	}
+   CREFFactoryObject::CREFFactoryObject(CREFConectionParms^ aParms)
+      :mParms(aParms), mObjectFactory(NULL)
+   {}
 
-	void CREFFactoryObject::CloseChannel()
-	{
-		if (!!mObjectFactory)
-		{
-			delete mObjectFactory;
-			mObjectFactory = NULL;
-		}
-	}
+   CREFFactoryObject::~CREFFactoryObject()
+   {
+      if (!!mObjectFactory)
+         delete mObjectFactory;
+   }
 
-	IObjectFactory* CREFFactoryObject::GetFactory()
-	{
-		if (!mObjectFactory)
-			mObjectFactory = CreateClientFactoryNptr(Converters::ConvertTo(mParms));
-		return mObjectFactory;
-	}
+   CREFPartitionMeta^ CREFFactoryObject::CreatePartitionMeta(UInt16 aIndex)
+   {
+      return Converters::ConvertTo(GetFactory()->CreatePartitionMeta(aIndex));
+   }
 
-	System::String^ CREFConfigFile::GetDefaultIP()
-	{
-		return Converters::ConvertTo(CConfigForms::GetInstance().GetDefaultIP());
-	}
+   System::Collections::ArrayList^ CREFFactoryObject::CreatePartitionsMeta()
+   {
+      return Converters::ConvertTo(GetFactory()->CreatePartitionsMeta());
+   }
 
-	Int32 CREFConfigFile::GetDefaultPort()
-	{
-		return CConfigForms::GetInstance().GetDefaultPort();
-	}
+   void CREFFactoryObject::CloseChannel()
+   {
+      if (!!mObjectFactory)
+      {
+         delete mObjectFactory;
+         mObjectFactory = NULL;
+      }
+   }
 
-	void CREFConfigFile::SetDefaultIP(System::String^ aIP)
-	{
-		CConfigForms::GetInstance().SetDefaultIP(Converters::ConvertTo(aIP));
-	}
+   IObjectFactory* CREFFactoryObject::GetFactory()
+   {
+      if (!mObjectFactory)
+         mObjectFactory = CreateClientFactoryNptr(Converters::ConvertTo(mParms));
+      return mObjectFactory;
+   }
 
-	void CREFConfigFile::SetDefaultPort(Int32 aPort)
-	{
-		CConfigForms::GetInstance().SetDefaultPort(aPort);
-	}
+   System::String^ CREFConfigFile::GetDefaultIP()
+   {
+      return Converters::ConvertTo(CConfigForms::GetInstance().GetDefaultIP());
+   }
+
+   Int32 CREFConfigFile::GetDefaultPort()
+   {
+      return CConfigForms::GetInstance().GetDefaultPort();
+   }
+
+   void CREFConfigFile::SetDefaultIP(System::String^ aIP)
+   {
+      CConfigForms::GetInstance().SetDefaultIP(Converters::ConvertTo(aIP));
+   }
+
+   void CREFConfigFile::SetDefaultPort(Int32 aPort)
+   {
+      CConfigForms::GetInstance().SetDefaultPort(aPort);
+   }
 };
