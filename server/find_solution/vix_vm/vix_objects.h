@@ -1,4 +1,4 @@
-#ifndef _VIX_OBJECTS_H_
+﻿#ifndef _VIX_OBJECTS_H_
 #define _VIX_OBJECTS_H_
 
 #include <memory>
@@ -42,6 +42,7 @@ private:
 public:
    ~CVixVirtualMachine();
 
+   bool IsPowerOn();
    void Pause();
    void UnPause();
    int GetNumSnapshots();

@@ -1,4 +1,5 @@
-#include "vix_objects.h"
+﻿#include "vix_objects.h"
+#include "../../../common/tools/CExceptions.h"
 
 //------------------------------------------------------------------------------
 #define  CONNTYPE    VIX_SERVICEPROVIDER_VMWARE_WORKSTATION
@@ -14,7 +15,7 @@ void VixAgregatorNamesProc(VixHandle jobHandle, VixEventType eventType, VixHandl
    VixError err = VIX_OK;
    char *url = NULL;
 
-   if (VIX_EVENTTYPE_FIND_ITEM != eventType) 
+   if (VIX_EVENTTYPE_FIND_ITEM != eventType)
       return;
 
    // Found a virtual machine.
@@ -25,7 +26,7 @@ void VixAgregatorNamesProc(VixHandle jobHandle, VixEventType eventType, VixHandl
    if (VIX_FAILED(err))
    {
       Vix_FreeBuffer(url);
-      throw std::exception("Ошибка установки паузы для виртуальной машины");
+      throw vm_exception_w(L"Ошибка установки паузы для виртуальной машины");
    }
    gContainerNames.push_back(std::string(url));
    Vix_FreeBuffer(url);
@@ -37,7 +38,7 @@ CVixSnapshot::CVixSnapshot(VixHandle aHandleVM, VixHandle aHandleShapshot)
 {
    if (mHandleVM == VIX_INVALID_HANDLE ||
       mHandleShapshot == VIX_INVALID_HANDLE)
-      throw std::exception("Ошибка получения метки состояния");
+      throw vm_exception_w(L"Ошибка получения метки состояния");
 }
 
 CVixSnapshot::~CVixSnapshot()
@@ -54,7 +55,7 @@ std::string CVixSnapshot::GetNameSnapshot()
       &lNameSnapshot,
       VIX_PROPERTY_NONE);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка получения имени состояния");
+      throw vm_exception_w(L"Ошибка получения имени состояния");
    return lNameSnapshot;
 }
 
@@ -68,12 +69,25 @@ CVixVirtualMachine::CVixVirtualMachine(VixHandle aHandleVM)
 :mHandleVM(aHandleVM)
 {
    if (mHandleVM == VIX_INVALID_HANDLE)
-      throw std::exception("Ошибка создания объекта виртуальной машины");
+      throw vm_exception_w(L"Ошибка создания объекта виртуальной машины");
 }
 
 CVixVirtualMachine::~CVixVirtualMachine()
 {
    Vix_ReleaseHandle(mHandleVM);
+}
+
+bool CVixVirtualMachine::IsPowerOn()
+{
+   VixError err;
+   VixToolsState lPowerState = 0;
+   err = Vix_GetProperties(mHandleVM,
+      VIX_PROPERTY_VM_POWER_STATE,
+      &lPowerState,
+      VIX_PROPERTY_NONE);
+   if (VIX_FAILED(err))
+      throw vm_exception_w(L"Ошибка получения состояния виртуальной машины");
+   return VIX_POWERSTATE_POWERED_ON & lPowerState;
 }
 
 void CVixVirtualMachine::Pause()
@@ -88,7 +102,7 @@ void CVixVirtualMachine::Pause()
    err = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
    Vix_ReleaseHandle(jobHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка установки паузы для виртуальной машины");
+      throw vm_exception_w(L"Ошибка установки паузы для виртуальной машины");
 }
 
 void CVixVirtualMachine::UnPause()
@@ -103,7 +117,7 @@ void CVixVirtualMachine::UnPause()
    err = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
    Vix_ReleaseHandle(jobHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка снятия паузы для виртуальной машины");
+      throw vm_exception_w(L"Ошибка снятия паузы для виртуальной машины");
 }
 
 int CVixVirtualMachine::GetNumSnapshots()
@@ -112,7 +126,7 @@ int CVixVirtualMachine::GetNumSnapshots()
    int numSnapshots;
    err = VixVM_GetNumRootSnapshots(mHandleVM, &numSnapshots);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка выполнения операции получения количества сохраненных состояний");
+      throw vm_exception_w(L"Ошибка выполнения операции получения количества сохраненных состояний");
    return numSnapshots;
 }
 
@@ -135,7 +149,7 @@ void CVixVirtualMachine::AddSnapshot(std::string aNameSnapshot, std::string aDes
    Vix_ReleaseHandle(jobHandle);
    Vix_ReleaseHandle(snapshotHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка создания метки состояния");
+      throw vm_exception_w(L"Ошибка создания метки состояния");
 }
 
 CVixSnapshot::Ptr CVixVirtualMachine::GetSnapshot(int aIndex)
@@ -145,7 +159,7 @@ CVixSnapshot::Ptr CVixVirtualMachine::GetSnapshot(int aIndex)
 
    err = VixVM_GetRootSnapshot(mHandleVM, aIndex, &snapshotHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка создания метки состояния");
+      throw vm_exception_w(L"Ошибка создания метки состояния");
    return  CVixSnapshot::Ptr(new CVixSnapshot(mHandleVM, snapshotHandle));
 }
 
@@ -155,7 +169,7 @@ CVixSnapshot::Ptr CVixVirtualMachine::GetSnapshot(std::string aNameSnapshot)
    VixHandle snapshotHandle = VIX_INVALID_HANDLE;
    err = VixVM_GetNamedSnapshot(mHandleVM, aNameSnapshot.c_str(), &snapshotHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка создания метки состояния");
+      throw vm_exception_w(L"Ошибка создания метки состояния");
    return  CVixSnapshot::Ptr(new CVixSnapshot(mHandleVM, snapshotHandle));
 }
 
@@ -168,19 +182,19 @@ void CVixVirtualMachine::RemoveSnapshot(std::string aNameSnapshot)
    if (VIX_FAILED(err))
    {
       Vix_ReleaseHandle(snapshotHandle);
-      throw std::exception("Ошибка получения состояния по имени");
+      throw vm_exception_w(L"Ошибка получения состояния по имени");
    }
 
    jobHandle = VixVM_RemoveSnapshot(mHandleVM,
-                                    snapshotHandle,
-                                    0, // options
-                                    NULL, // callbackProc
-                                    NULL); // clientData
+      snapshotHandle,
+      0, // options
+      NULL, // callbackProc
+      NULL); // clientData
    err = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
    Vix_ReleaseHandle(jobHandle);
    Vix_ReleaseHandle(snapshotHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка удаления метки состояния");
+      throw vm_exception_w(L"Ошибка удаления метки состояния");
 }
 
 //------------------------------------------------------------------------------
@@ -205,7 +219,7 @@ CVixHost::CVixHost()
       VIX_PROPERTY_NONE);
    Vix_ReleaseHandle(jobHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка соединения с хостом");
+      throw vm_exception_w(L"Ошибка соединения с хостом");
 }
 
 CVixHost::~CVixHost()
@@ -228,7 +242,7 @@ std::vector<std::string> CVixHost::GetNamesVMachines()
    err = VixJob_Wait(jobHandle, VIX_PROPERTY_NONE);
    Vix_ReleaseHandle(jobHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка выполения операции поиска зарегистрированных машин");
+      throw vm_exception_w(L"Ошибка выполения операции поиска зарегистрированных машин");
    return gContainerNames;
 }
 
@@ -247,6 +261,6 @@ CVixVirtualMachine::Ptr CVixHost::GetVM(std::string aFileNameVM)
       VIX_PROPERTY_NONE);
    Vix_ReleaseHandle(jobHandle);
    if (VIX_FAILED(err))
-      throw std::exception("Ошибка открытия виртуальной машины");
+      throw vm_exception_w(L"Ошибка открытия виртуальной машины");
    return CVixVirtualMachine::Ptr(new CVixVirtualMachine(vmHandle));
 }
