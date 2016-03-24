@@ -8,8 +8,8 @@ int main(int argc, char* argv[])
    std::locale current_locale("");
    std::locale::global(current_locale);
 
-   //std::string lNameVM = "E:\\tmp\\vm\\Windows 8 x64.vmx";
-   std::string lNameVM = "E:\\VirtualM\\Ubuntu 64-bit\\Ubuntu 64-bit (2).vmx";
+   std::string lNameVM = "E:\\tmp\\vm\\Windows 8 x64.vmx";
+   //std::string lNameVM = "E:\\VirtualM\\Ubuntu 64-bit\\Ubuntu 64-bit (2).vmx";
    try{
 	   CVixHost lHost;
 	   CVixVirtualMachine::Ptr lVM = lHost.GetVM(lNameVM.c_str());

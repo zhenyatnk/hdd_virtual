@@ -6,7 +6,6 @@
  * This is the C interface to the VIX API.
  * This is platform-independent.
  */
-
 #ifndef _VIX_H_
 #define _VIX_H_
 
