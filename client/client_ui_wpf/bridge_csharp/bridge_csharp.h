@@ -6,6 +6,17 @@ using namespace System;
 
 namespace bridge_csharp
 {
+   public ref class CREFServerException
+      :public System::Exception
+   {
+   public:
+      CREFServerException(System::String^ aMessage);
+      System::String^ GetMessage();
+
+   private:
+      System::String^ mMessage;
+   };
+   
    public ref class CREFConectionParms
    {
    public:

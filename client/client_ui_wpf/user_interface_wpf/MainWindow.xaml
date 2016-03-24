@@ -18,12 +18,13 @@
                     <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}"/>
                     <GridViewColumn Header="Загрузочный" DisplayMemberBinding="{Binding Bootable}"/>
                     <GridViewColumn Header="Размер (ГБ)" DisplayMemberBinding="{Binding Size}"/>
-    				<GridViewColumn Header="Файловая система" DisplayMemberBinding="{Binding Type}"/>
+    				     <GridViewColumn Header="Файловая система" DisplayMemberBinding="{Binding Type}"/>
     			</GridView>
     		</ListView.View>
     	</ListView>
-    	<ListBox Margin="0,0,0,0" Grid.Row="2"/>
-    	<Menu Margin="0,0,0,0" Grid.Row="0" Grid.ColumnSpan="2">
+      <ListBox x:Name="lbListError" Margin="0,0,0,0" Grid.Row="2">
+      </ListBox>
+      <Menu Margin="0,0,0,0" Grid.Row="0" Grid.ColumnSpan="2">
     		<MenuItem Header="Настройки">
                 <MenuItem Header="Параметры соединения" Click="MenuItem_Click">
 				</MenuItem>

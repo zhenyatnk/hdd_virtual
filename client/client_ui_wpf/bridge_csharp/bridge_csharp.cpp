@@ -4,6 +4,7 @@
 #include <string>
 #include "bridge_csharp.h"
 #include "../../tools/CConfig.h"
+#include "../../../common/tools/CExceptions.h"
 
 namespace bridge_csharp
 {
@@ -46,6 +47,16 @@ namespace bridge_csharp
          return lParm;
       }
    }
+
+   //-------------------------------------------------------------------------------
+   CREFServerException::CREFServerException(System::String^ aMessage)
+      :System::Exception("CREFServerException"), mMessage(aMessage)
+   {}
+
+   System::String^ CREFServerException::GetMessage()
+   {
+      return mMessage;
+   }
    //-------------------------------------------------------------------------------
    CREFConectionParms::CREFConectionParms()
       :mHostName(""), mIP(""), mPort(0), mFamily(0)
@@ -83,12 +94,26 @@ namespace bridge_csharp
 
    CREFPartitionMeta^ CREFFactoryObject::CreatePartitionMeta(UInt16 aIndex)
    {
-      return Converters::ConvertTo(GetFactory()->CreatePartitionMeta(aIndex));
+      try
+      {
+         return Converters::ConvertTo(GetFactory()->CreatePartitionMeta(aIndex));
+      }
+      catch (server_exception &e)
+      {
+         throw gcnew CREFServerException(gcnew System::String(e.get_message().c_str()));
+      }
    }
 
    System::Collections::ArrayList^ CREFFactoryObject::CreatePartitionsMeta()
    {
-      return Converters::ConvertTo(GetFactory()->CreatePartitionsMeta());
+      try
+      {
+         return Converters::ConvertTo(GetFactory()->CreatePartitionsMeta());
+      }
+      catch (server_exception &e)
+      {
+         throw gcnew CREFServerException(gcnew System::String(e.get_message().c_str()));
+      }
    }
 
    void CREFFactoryObject::CloseChannel()

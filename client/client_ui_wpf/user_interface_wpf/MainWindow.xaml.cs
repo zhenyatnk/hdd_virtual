@@ -22,10 +22,11 @@ namespace client_wpf
       public MainWindow()
       {
          InitializeDefaultChanel();
+         InitializeComponent();
+         ErrorLog = new List<System.String>();
          if (!ChangeParmsConnection())
             mFactoryObject = new CREFFactoryObject(mParmConnection);
          ReloadInfoHDDToListView();
-         InitializeComponent();
       }
       private void MenuItem_Click(object sender, RoutedEventArgs e)
       {
@@ -43,6 +44,8 @@ namespace client_wpf
             mParmConnection = lForm.GetParametersConnection();
             mConfigFile.SetDefaultIP(mParmConnection.mIP);
             mConfigFile.SetDefaultPort(mParmConnection.mPort);
+            if (mFactoryObject != null)
+               mFactoryObject.CloseChannel();
             mFactoryObject = new CREFFactoryObject(mParmConnection);
          }
          return true == lStat;
@@ -76,11 +79,21 @@ namespace client_wpf
             }
             this.DataContext = this;
          }
-         catch
+         catch (CREFServerException Error)
          {
-            Close();
+            ErrorLog.Add(Error.GetMessage());
+            lbListError.ItemsSource = new List<System.String>(ErrorLog);
          }
       }
+      private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+      {
+         if (mFactoryObject != null)
+            mFactoryObject.CloseChannel();
+      }
+
+      private CREFFactoryObject mFactoryObject;
+      private CREFConfigFile mConfigFile;
+      private CREFConectionParms mParmConnection;
 
       public class ListHDDElement
       {
@@ -89,19 +102,7 @@ namespace client_wpf
          public uint Size { get; set; }
          public ushort Type { get; set; }
       }
-      private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-      {
-         if (mFactoryObject != null)
-         {
-            mFactoryObject.CloseChannel();
-         }
-      }
-
       public IList<ListHDDElement> HDDInfo { get; set; }
-
-      private CREFFactoryObject mFactoryObject;
-      private CREFConfigFile mConfigFile;
-      private CREFConectionParms mParmConnection;
-
+      public IList<System.String> ErrorLog { get; set; }
    }
 }
