@@ -44,7 +44,6 @@ TBuffer<VIXDISKLIB_SECTOR_SIZE>::Ptr CVix_VirtualDisk::ReadSector(uint32 aNumber
    CHECK_AND_THROW(vixError);
    return lBuffer;
 }
-
 //------------------------------------------------------------------------------
 CVix_DiskLibrary::CVix_DiskLibrary()
 :mConnection(NULL)
