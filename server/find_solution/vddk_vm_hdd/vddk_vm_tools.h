@@ -20,24 +20,6 @@ struct TPartitionMeta {
 };
 #pragma pack(pop)
 //------------------------------------------------------------------------------
-class VixDiskLibErrWrapper
-{
-public:
-   VixDiskLibErrWrapper(VixError aErrorCode, const char* aFile, int aLine);
-   VixDiskLibErrWrapper(const char* aDescription, const char* aFile, int aLine);
-
-   std::string Description() const;
-   VixError ErrorCode() const;
-   std::string File() const;
-   int Line() const;
-
-private:
-   VixError mErrorCode;
-   std::string mDescription;
-   std::string mFile;
-   int mLine;
-};
-//------------------------------------------------------------------------------
 class CVix_VirtualDisk
 {
 public:

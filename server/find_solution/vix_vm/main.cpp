@@ -14,9 +14,9 @@ int main(int argc, char* argv[])
 	   CVixHost lHost;
 	   CVixVirtualMachine::Ptr lVM = lHost.GetVM(lNameVM.c_str());
 	   bool lVMRun = lVM->IsPowerOn();
-	   if (lVMRun)
+	   if (!lVMRun)
 		   lVM->AddSnapshot("VM_SNAP_INFO", "");
-	   if (lVMRun)
+	   if (!lVMRun)
 		   lVM->RemoveSnapshot("VM_SNAP_INFO");
    }
    catch (vm_exception_w &err)
