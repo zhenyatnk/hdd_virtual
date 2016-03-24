@@ -6,19 +6,9 @@
 #include <string>
 #include <vector>
 
-#include "vixDiskLib.h"
+#include "../../common/tools/TBuffer.h"
+#include "../External/VMWare/h/vixDiskLib.h"
 
-//------------------------------------------------------------------------------
-#pragma pack(push,1)
-struct TPartitionMeta {
-   UINT8 bootable;
-   UINT8 start_part[3];
-   UINT8 type_part;
-   UINT8 end_part[3];
-   UINT32 sect_before;
-   UINT32 sect_total;
-};
-#pragma pack(pop)
 //------------------------------------------------------------------------------
 class CVix_VirtualDisk
 {
@@ -35,7 +25,7 @@ private:
 public:
    ~CVix_VirtualDisk();
 
-   std::vector<TPartitionMeta> GetMetaPartitions();
+   TBuffer<VIXDISKLIB_SECTOR_SIZE>::Ptr ReadSector(uint32 aNumberSector);
 
 private:
    VixDiskLibHandle mHandleVirtualDisk;

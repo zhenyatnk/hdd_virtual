@@ -13,12 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
     </Filter>
+    <Filter Include="External">
+      <UniqueIdentifier>{c0cb892f-8926-424d-9fdf-e63f3d785fc7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vix_objects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="vddk_vm_tools.cpp">
@@ -29,17 +29,23 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\vix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\vm_basic_types.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="vix_objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="vddk_vm_tools.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\VMWare\h\vix.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\VMWare\h\vixDiskLib.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\VMWare\h\vixMntapi.h">
+      <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="..\External\VMWare\h\vm_basic_types.h">
+      <Filter>External</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

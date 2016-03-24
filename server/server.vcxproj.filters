@@ -7,8 +7,8 @@
     <Filter Include="transport">
       <UniqueIdentifier>{0b7fb4e1-d30c-41d4-b020-b6ce001d732b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="extend">
-      <UniqueIdentifier>{a23fba8a-005b-4513-8ef7-e7b1629905e8}</UniqueIdentifier>
+    <Filter Include="hdd_info">
+      <UniqueIdentifier>{04ad6910-fdd3-4123-a49e-d259ac7f4cdb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -18,11 +18,17 @@
     <ClInclude Include="transport\CSObjectFactory.h">
       <Filter>transport</Filter>
     </ClInclude>
+    <ClInclude Include="hdd_info\hdd_info_tools.h">
+      <Filter>hdd_info</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="transport\CSObjectFactory.cpp">
       <Filter>transport</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="hdd_info\hdd_info_tools.cpp">
+      <Filter>hdd_info</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

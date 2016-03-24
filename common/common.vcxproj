@@ -23,6 +23,7 @@
     <ClInclude Include="tools\CExceptions.h" />
     <ClInclude Include="tools\ISocket.h" />
     <ClInclude Include="tools\IThread.h" />
+    <ClInclude Include="tools\TBuffer.h" />
     <ClInclude Include="tools\TypeDef.h" />
     <ClInclude Include="transport\CFormatDataTransport.h" />
     <ClInclude Include="transport\CPartitionMeta.h" />

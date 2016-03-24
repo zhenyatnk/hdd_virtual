@@ -125,38 +125,5 @@ public:
       return lContainerObjects;
    }
 };
-//-------------------------------------------------------------
-template <int aBufferSize>
-struct TBuffer
-{
-   TBuffer()
-   {
-      Clear();
-   }
-
-   void Clear()
-   {
-      memset(mData, 0, aBufferSize);
-   }
-
-   std::string ToString()
-   {
-      return std::string((char*)mData);
-   }
-
-   char* GetData()
-   {
-      return (char*)mData;
-   }
-
-   UINT32 GetSize()
-   {
-      return aBufferSize;
-   }
-
-private:
-   UINT8 mData[aBufferSize];
-};
-
 
 #endif

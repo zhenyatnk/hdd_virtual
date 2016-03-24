@@ -38,18 +38,14 @@ CVix_VirtualDisk::~CVix_VirtualDisk()
    mHandleVirtualDisk = NULL;
 }
 
-std::vector<TPartitionMeta> CVix_VirtualDisk::GetMetaPartitions()
+TBuffer<VIXDISKLIB_SECTOR_SIZE>::Ptr CVix_VirtualDisk::ReadSector(uint32 aNumberSector)
 {
-   std::vector<TPartitionMeta> lPartMeta(4);
-   lPartMeta.reserve(4);
-   uint8 Sector0[512];
-   VixError vixError = VixDiskLib_Read(mHandleVirtualDisk, 0, 1, Sector0);
-   if (vixError != VIX_OK && vixError != VIX_E_BUFFER_TOOSMALL)
-      THROW_ERROR(vixError);
-   memset((void *)&lPartMeta[0], 0, (sizeof(TPartitionMeta)* lPartMeta.size()));
-   memcpy((void *)&lPartMeta[0], Sector0 + 0x1BE, (sizeof(TPartitionMeta)* lPartMeta.size()));
-   return lPartMeta;
+   TBuffer<VIXDISKLIB_SECTOR_SIZE>::Ptr lBuffer(new TBuffer<VIXDISKLIB_SECTOR_SIZE>());
+   VixError vixError = VixDiskLib_Read(mHandleVirtualDisk, aNumberSector, 1, (uint8*)lBuffer->GetData());
+   CHECK_AND_THROW(vixError);
+   return lBuffer;
 }
+
 //------------------------------------------------------------------------------
 CVix_DiskLibrary::CVix_DiskLibrary()
 :mConnection(NULL)

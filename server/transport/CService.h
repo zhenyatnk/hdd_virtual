@@ -4,6 +4,7 @@
 #include "./../../common/tools/ISocket.h"
 #include "./../../common/transport/CPartitionMeta.h"
 #include "./../../common/tools/IThread.h"
+#include "./../../common/tools/TBuffer.h"
 #include "./../../common/tools/CExceptions.h"
 #include "./../../common/transport/CFormatDataTransport.h"
 //------------------------------------------------------------------------

@@ -36,6 +36,9 @@
     <ClInclude Include="transport\CFormatDataTransport.h">
       <Filter>Transport</Filter>
     </ClInclude>
+    <ClInclude Include="tools\TBuffer.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tools\CSocket.cpp">

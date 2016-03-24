@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "vix.h"
+#include "../External/VMWare/h/vix.h"
 //------------------------------------------------------------------------------
 class CVixSnapshot
 {
