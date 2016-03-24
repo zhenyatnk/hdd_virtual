@@ -92,10 +92,17 @@ public:
 
    virtual void Run()
    {
-      this->GetSocket()->Listen(0);
-      ISocket::Ptr lClientSocket;
-      while (!!(lClientSocket = this->GetSocket()->Accept()))
-         (new CChanelClient(lClientSocket))->start();
+      try
+      {
+         this->GetSocket()->Listen(0);
+         ISocket::Ptr lClientSocket;
+         while (!!(lClientSocket = this->GetSocket()->Accept()))
+            (new CChanelClient(lClientSocket))->start();
+      }
+      catch (socket_exception_w &e)
+      {
+         wprintf(e.get_message().c_str());
+      }
    }
 
 private:
