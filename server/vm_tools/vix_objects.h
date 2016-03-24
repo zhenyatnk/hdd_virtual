@@ -15,6 +15,8 @@ public:
 
 private:
    CVixSnapshot(VixHandle aHandleVM, VixHandle aHandleShapshot);
+   CVixSnapshot(const CVixSnapshot&);
+   CVixSnapshot& operator = (const CVixSnapshot&);
 
 public:
    ~CVixSnapshot();
@@ -36,7 +38,9 @@ public:
    friend class CVixHost;
 
 private:
-   CVixVirtualMachine(VixHandle aHandle);
+   explicit CVixVirtualMachine(VixHandle aHandle);
+   CVixVirtualMachine(const CVixVirtualMachine&);
+   CVixVirtualMachine& operator = (const CVixVirtualMachine&);
 
 public:
    ~CVixVirtualMachine();
@@ -58,9 +62,14 @@ class CVixHost
 {
 public:
    CVixHost();
+
+private:
+   CVixHost(const CVixHost&);
+   CVixHost& operator = (const CVixHost&);
+
+public:
    ~CVixHost();
 
-   std::vector<std::string> GetNamesVMachines();
    CVixVirtualMachine::Ptr GetVM(std::string aFileNameVM);
 
 private:

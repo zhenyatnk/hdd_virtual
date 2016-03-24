@@ -49,30 +49,29 @@ void PrintPartitionMetainf(std::vector<TPartitionMeta> aPartsMeta)
       printf("0x%.2X\t", lIteratorInf->type_part);
       wprintf(L"%s\n", GetFileSysMap()[lIteratorInf->type_part].c_str());
    }
-
 }
 
 int main(int argc, char* argv[])
 {
    std::locale current_locale("");
    std::locale::global(current_locale);
-
+   std::string lSnapshotName = "VM_SNAP_HDD_INFO";
    std::string lNameVM = "E:\\tmp\\vm\\Windows 8 x64.vmx";
    try
    {
       CVixHost lHost;
       CVixVirtualMachine::Ptr lVM = lHost.GetVM(lNameVM);
       bool lVMRun = lVM->IsPowerOn();
-      if (!lVMRun)
-         lVM->AddSnapshot("VM_SNAP_INFO111111", "");
+      if (lVMRun)
+         lVM->AddSnapshot(lSnapshotName, lSnapshotName);
       CVix_DiskLibrary lDiskLib;
-      if (lDiskLib.Connect())
+      if (lDiskLib.Connect(lNameVM))
       {
          CVix_VirtualDisk::Ptr lDisk = lDiskLib.GetVirtualDisk("E:\\tmp\\vm\\Windows 8 x64.vmdk");
          PrintPartitionMetainf(lDisk->GetMetaPartitions());
       }
-      if (!lVMRun)
-         lVM->RemoveSnapshot("VM_SNAP_INFO11111");
+      if (lVMRun)
+         lVM->RemoveSnapshot(lSnapshotName);
    }
    catch (vm_exception_w &err)
    {

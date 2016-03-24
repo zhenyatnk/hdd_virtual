@@ -5,7 +5,7 @@
 #define VIXDISKLIB_VERSION_MAJOR 6
 #define VIXDISKLIB_VERSION_MINOR 0
 //------------------------------------------------------------------------------
-std::wstring GetVixErrorMessage(VixError aErrorCode)
+std::wstring GetVDDKErrorMessage(VixError aErrorCode)
 {
    char* lMessage = VixDiskLib_GetErrorText(aErrorCode, NULL);
    std::string str = lMessage;
@@ -15,12 +15,12 @@ std::wstring GetVixErrorMessage(VixError aErrorCode)
 }
 //------------------------------------------------------------------------------
 #define THROW_ERROR(vixError) \
-   throw vm_exception_w(GetVixErrorMessage(vixError));
+   throw vm_exception_w(GetVDDKErrorMessage(vixError));
 
 #define CHECK_AND_THROW(vixError)\
 if (VIX_FAILED((vixError))) \
 { \
-   throw vm_exception_w(GetVixErrorMessage(vixError)); \
+   throw vm_exception_w(GetVDDKErrorMessage(vixError)); \
 }
 
 //------------------------------------------------------------------------------
@@ -66,9 +66,15 @@ CVix_DiskLibrary::~CVix_DiskLibrary()
    VixDiskLib_Exit();
 }
 
-bool CVix_DiskLibrary::Connect()
+bool CVix_DiskLibrary::Connect(std::string aNameVM)
 {
    VixDiskLibConnectParams cnxParams = { 0 };
+   if (!aNameVM.empty())
+   {
+      cnxParams.vmxSpec = new char(aNameVM.size() + 1);
+      memset(cnxParams.vmxSpec, 0, aNameVM.size() + 1);
+      strcpy(cnxParams.vmxSpec, aNameVM.c_str());
+   }
    return Connect(cnxParams);
 }
 bool CVix_DiskLibrary::Connect(VixDiskLibConnectParams aParms)

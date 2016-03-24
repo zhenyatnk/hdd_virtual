@@ -28,6 +28,9 @@ public:
 
 private:
    CVix_VirtualDisk(VixDiskLibConnection aConnectionParms, const char *aPathVirtualDisk, uint32 aFlagsOpen);
+   CVix_VirtualDisk(const CVix_VirtualDisk&);
+   
+   CVix_VirtualDisk& operator = (const CVix_VirtualDisk&);
 
 public:
    ~CVix_VirtualDisk();
@@ -44,7 +47,7 @@ public:
    CVix_DiskLibrary();
    ~CVix_DiskLibrary();
 
-   bool Connect();
+   bool Connect(std::string aNameVM = "");
    bool Connect(VixDiskLibConnectParams aParms);
 
    CVix_VirtualDisk::Ptr GetVirtualDisk(std::string aDiskPath);
