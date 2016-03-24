@@ -8,21 +8,20 @@
 #define  USERNAME ""
 #define  PASSWORD ""
 //------------------------------------------------------------------------------
-std::wstring GetVIXErrorMessage(VixError aErrorCode)
+std::string GetVIXErrorMessage(VixError aErrorCode)
 {
    const char* lMessage = Vix_GetErrorText(aErrorCode, NULL);
    std::string str = lMessage;
-   std::wstring lMessageWString = std::wstring(str.begin(), str.end());
-   return lMessageWString;
+   return str;
 }
 //------------------------------------------------------------------------------
 #define THROW_ERROR(vixError) \
-   throw vm_exception_w(GetVIXErrorMessage(vixError));
+   throw vm_exception(GetVIXErrorMessage(vixError));
 
 #define CHECK_AND_THROW(vixError)\
 if (VIX_FAILED((vixError))) \
 { \
-   throw vm_exception_w(GetVIXErrorMessage(vixError)); \
+   throw vm_exception(GetVIXErrorMessage(vixError)); \
 }
 //------------------------------------------------------------------------------
 CVixSnapshot::CVixSnapshot(VixHandle aHandleVM, VixHandle aHandleShapshot)
@@ -30,7 +29,7 @@ CVixSnapshot::CVixSnapshot(VixHandle aHandleVM, VixHandle aHandleShapshot)
 {
    if (mHandleVM == VIX_INVALID_HANDLE ||
       mHandleShapshot == VIX_INVALID_HANDLE)
-      throw vm_exception_w(L"Ошибка получения метки состояния");
+      throw vm_exception("Cannot get snapshot.");
 }
 
 CVixSnapshot::~CVixSnapshot()
@@ -60,7 +59,7 @@ CVixVirtualMachine::CVixVirtualMachine(VixHandle aHandleVM)
 :mHandleVM(aHandleVM)
 {
    if (mHandleVM == VIX_INVALID_HANDLE)
-      throw vm_exception_w(L"Ошибка создания объекта виртуальной машины");
+      throw vm_exception("Cannot get virtal machine.");
 }
 
 CVixVirtualMachine::~CVixVirtualMachine()

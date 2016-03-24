@@ -4,6 +4,7 @@
 #include "Main_Form.h"
 #include "Connect_Form.h"
 #include "../tools/CConfig.h"
+#include "../../common/tools/CExceptions.h"
 
 namespace
 {
@@ -54,6 +55,10 @@ namespace UserInterface
             lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)(*lIterator)->GetTypePart())));
             lvHDDInfoListView->Items->Add(lHDDInfo);
          }
+      }
+      catch (server_exception &e)
+      {
+         lbLogListBox->Items->Add(gcnew System::String(e.get_message().c_str()));
       }
       catch (System::Object^ e)
       {
@@ -108,11 +113,11 @@ namespace UserInterface
       this->tlFullInformationLayot->SuspendLayout();
       this->SuspendLayout();
       // 
-      // listView1
+      // lvHDDInfoListView
       // 
       this->lvHDDInfoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {
-         this->chHeader_HddLabel, this->chHeader_Bootable,
-            this->chHeader_Size, this->chHeader_FileSystem
+         this->chHeader_HddLabel,
+            this->chHeader_Bootable, this->chHeader_Size, this->chHeader_FileSystem
       });
       this->lvHDDInfoListView->Dock = System::Windows::Forms::DockStyle::Fill;
       this->lvHDDInfoListView->LargeImageList = this->imageList1;
@@ -123,22 +128,22 @@ namespace UserInterface
       this->lvHDDInfoListView->UseCompatibleStateImageBehavior = false;
       this->lvHDDInfoListView->View = System::Windows::Forms::View::Details;
       // 
-      // columnHeader1
+      // chHeader_HddLabel
       // 
       this->chHeader_HddLabel->Text = L"Название";
       this->chHeader_HddLabel->Width = 83;
       // 
-      // columnHeader2
+      // chHeader_Bootable
       // 
       this->chHeader_Bootable->Text = L"Загрузочный";
       this->chHeader_Bootable->Width = 56;
       // 
-      // columnHeader3
+      // chHeader_Size
       // 
       this->chHeader_Size->Text = L"Размер (ГБ)";
       this->chHeader_Size->Width = 91;
       // 
-      // columnHeader4
+      // chHeader_FileSystem
       // 
       this->chHeader_FileSystem->Text = L"Файловая система";
       this->chHeader_FileSystem->Width = 113;
@@ -149,7 +154,7 @@ namespace UserInterface
       this->imageList1->TransparentColor = System::Drawing::Color::Transparent;
       this->imageList1->Images->SetKeyName(0, L"hdd_icon.png");
       // 
-      // menuStrip1
+      // msTopMenuStrip
       // 
       this->msTopMenuStrip->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->smiSettingsMenuItem });
       this->msTopMenuStrip->Location = System::Drawing::Point(0, 0);
@@ -158,21 +163,21 @@ namespace UserInterface
       this->msTopMenuStrip->TabIndex = 2;
       this->msTopMenuStrip->Text = L"menuStrip1";
       // 
-      // настройкиToolStripMenuItem
+      // smiSettingsMenuItem
       // 
       this->smiSettingsMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->smiParametersConnectionMenuItem });
       this->smiSettingsMenuItem->Name = L"smiSettingsMenuItem";
       this->smiSettingsMenuItem->Size = System::Drawing::Size(79, 20);
       this->smiSettingsMenuItem->Text = L"Настройки";
       // 
-      // параметрыСоединенияToolStripMenuItem
+      // smiParametersConnectionMenuItem
       // 
       this->smiParametersConnectionMenuItem->Name = L"smiParametersConnectionMenuItem";
       this->smiParametersConnectionMenuItem->Size = System::Drawing::Size(206, 22);
       this->smiParametersConnectionMenuItem->Text = L"Параметры соединения";
       this->smiParametersConnectionMenuItem->Click += gcnew System::EventHandler(this, &Main_Form::smiParametersConnectionMenuItem_Click);
       // 
-      // splitContainer1
+      // scMainSplitContainer
       // 
       this->scMainSplitContainer->Dock = System::Windows::Forms::DockStyle::Fill;
       this->scMainSplitContainer->FixedPanel = System::Windows::Forms::FixedPanel::Panel2;
@@ -180,18 +185,18 @@ namespace UserInterface
       this->scMainSplitContainer->Name = L"scMainSplitContainer";
       this->scMainSplitContainer->Orientation = System::Windows::Forms::Orientation::Horizontal;
       // 
-      // splitContainer1.Panel1
+      // scMainSplitContainer.Panel1
       // 
       this->scMainSplitContainer->Panel1->Controls->Add(this->lvHDDInfoListView);
       // 
-      // splitContainer1.Panel2
+      // scMainSplitContainer.Panel2
       // 
       this->scMainSplitContainer->Panel2->Controls->Add(this->lbLogListBox);
       this->scMainSplitContainer->Size = System::Drawing::Size(366, 231);
       this->scMainSplitContainer->SplitterDistance = 162;
       this->scMainSplitContainer->TabIndex = 3;
       // 
-      // listBox1
+      // lbLogListBox
       // 
       this->lbLogListBox->Dock = System::Windows::Forms::DockStyle::Fill;
       this->lbLogListBox->FormattingEnabled = true;
@@ -200,7 +205,7 @@ namespace UserInterface
       this->lbLogListBox->Size = System::Drawing::Size(366, 65);
       this->lbLogListBox->TabIndex = 0;
       // 
-      // tableLayoutPanel1
+      // tlFullInformationLayot
       // 
       this->tlFullInformationLayot->ColumnCount = 2;
       this->tlFullInformationLayot->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
@@ -212,11 +217,12 @@ namespace UserInterface
       this->tlFullInformationLayot->Location = System::Drawing::Point(0, 24);
       this->tlFullInformationLayot->Name = L"tlFullInformationLayot";
       this->tlFullInformationLayot->RowCount = 1;
-      this->tlFullInformationLayot->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
+      this->tlFullInformationLayot->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent,
+         100)));
       this->tlFullInformationLayot->Size = System::Drawing::Size(522, 237);
       this->tlFullInformationLayot->TabIndex = 4;
       // 
-      // Form1
+      // Main_Form
       // 
       this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
@@ -225,8 +231,8 @@ namespace UserInterface
       this->Controls->Add(this->msTopMenuStrip);
       this->MainMenuStrip = this->msTopMenuStrip;
       this->Name = L"Main_Form";
-      this->Text = L"Информация о дисках и разделах VM";
       this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
+      this->Text = L"Информация о дисках и разделах VM";
       this->msTopMenuStrip->ResumeLayout(false);
       this->msTopMenuStrip->PerformLayout();
       this->scMainSplitContainer->Panel1->ResumeLayout(false);

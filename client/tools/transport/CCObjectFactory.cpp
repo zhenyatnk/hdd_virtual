@@ -1,6 +1,7 @@
 ﻿#include "CCObjectFactory.h"
 #include "./../../../common/tools/ISocket.h"
 #include "./../../../common/tools/CExceptions.h"
+#include "./../../../common/tools/TBuffer.h"
 #include "./../../../common/transport/CFormatDataTransport.h"
 
 class CClientFactory
@@ -23,7 +24,6 @@ private:
       this->GetSocket()->Send(CFormatDataTransport::command_get_object<TObject>());
       if (this->GetSocket()->Receive(lBuffer.GetData(), lBuffer.GetSize()))
       {
-         printf("%s\n", lBuffer.GetData());
          if (lBuffer.ToString() != CFormatDataTransport::command_error())
             lObject = ConverterFromStr::Convert<TObject>(lBuffer.ToString());
       }
@@ -37,9 +37,11 @@ private:
       this->GetSocket()->Send(CFormatDataTransport::command_get_object_list<TObject>());
       while (this->GetSocket()->Receive(lBuffer.GetData(), lBuffer.GetSize()) && 
              lBuffer.ToString() != CFormatDataTransport::command_error() && 
-             lBuffer.ToString() != CFormatDataTransport::command_close())
+             lBuffer.ToString() != CFormatDataTransport::command_close() )
       {
-         printf("%s\n", lBuffer.GetData());
+         if (lBuffer.ToString().substr(0, CFormatDataTransport::command_error().size()) == CFormatDataTransport::command_error())
+            throw server_exception(lBuffer.ToString());
+
          std::vector<typename TObject::Ptr> lPartObjects = ConverterFromStr::ConvertToList<TObject>(lBuffer.ToString());
          for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lPartObjects.begin(); lIterator != lPartObjects.end(); ++lIterator)
             lContainerObjects.push_back(*lIterator);

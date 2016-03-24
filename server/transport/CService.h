@@ -7,6 +7,7 @@
 #include "./../../common/tools/TBuffer.h"
 #include "./../../common/tools/CExceptions.h"
 #include "./../../common/transport/CFormatDataTransport.h"
+#include "./hdd_info/hdd_info_tools.h"
 //------------------------------------------------------------------------
 class CChanelClient
    :public IThread
@@ -33,44 +34,42 @@ public:
          }
          else if (lString_buffer == CFormatDataTransport::command_get_object_list<CPartitionMeta>())
          {
-            std::vector<CPartitionMeta::Ptr> lContainerObjects;
-            UINT32 lCount = 0;
-            while (lCount < 1)
+            try
             {
-               lContainerObjects.push_back(CPartitionMeta::Ptr(new CPartitionMeta(false, 12, 151110)));
-               lContainerObjects.push_back(CPartitionMeta::Ptr(new CPartitionMeta(true, 2, 54110)));
-               lContainerObjects.push_back(CPartitionMeta::Ptr(new CPartitionMeta(false, 1, 14110)));
-               lContainerObjects.push_back(CPartitionMeta::Ptr(new CPartitionMeta(false, 5, 178110)));
-               ++lCount;
-            }
-            TBuffer<DEFAULT_BUFLEN> lBufferChannel;
-            std::string lBufferRec = "";
-            bool isFirst = true;
-            for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lContainerObjects.begin(); lIterator != lContainerObjects.end(); ++lIterator)
-            {
-               std::string lStringObj = CFormatDataTransport::command_value_object<ConverterToStr>(*lIterator);
-               if ((lBufferRec.size() + lStringObj.size()) >= DEFAULT_BUFLEN)
+               std::vector<CPartitionMeta::Ptr> lContainerObjects = GetContainerPartitionMeta("E:\\tmp\\vm\\Windows 8 x64.vmx", "E:\\tmp\\vm\\Windows 8 x64.vmdk");
+               TBuffer<DEFAULT_BUFLEN> lBufferChannel;
+               std::string lBufferRec = "";
+               bool isFirst = true;
+               for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lContainerObjects.begin(); lIterator != lContainerObjects.end(); ++lIterator)
+               {
+                  std::string lStringObj = CFormatDataTransport::command_value_object<ConverterToStr>(*lIterator);
+                  if ((lBufferRec.size() + lStringObj.size()) >= DEFAULT_BUFLEN)
+                  {
+                     if (!isFirst && !(mSocketClient->Receive(lBufferChannel.GetData(), lBufferChannel.GetSize()) &&
+                        lBufferChannel.ToString() == CFormatDataTransport::command_wait()))
+                        break;
+                     mSocketClient->Send(lBufferRec);
+                     if (isFirst) isFirst = false;
+                     lBufferRec = "";
+                  }
+                  if (!lBufferRec.empty())
+                     lBufferRec += ConverterToStr::Separator;
+                  lBufferRec += lStringObj;
+               }
+               if (!lBufferRec.empty())
                {
                   if (!isFirst && !(mSocketClient->Receive(lBufferChannel.GetData(), lBufferChannel.GetSize()) &&
                      lBufferChannel.ToString() == CFormatDataTransport::command_wait()))
                      break;
                   mSocketClient->Send(lBufferRec);
-                  if (isFirst) isFirst = false;
                   lBufferRec = "";
                }
-               if (!lBufferRec.empty())
-                  lBufferRec += ConverterToStr::Separator;
-               lBufferRec += lStringObj;
+               mSocketClient->Send(CFormatDataTransport::command_close());
             }
-            if (!lBufferRec.empty())
+            catch (vm_exception &e)
             {
-               if (!isFirst && !(mSocketClient->Receive(lBufferChannel.GetData(), lBufferChannel.GetSize()) &&
-                  lBufferChannel.ToString() == CFormatDataTransport::command_wait()))
-                  break;
-               mSocketClient->Send(lBufferRec);
-               lBufferRec = "";
+               mSocketClient->Send(CFormatDataTransport::command_error(e.get_message()));
             }
-            mSocketClient->Send(CFormatDataTransport::command_close());
          }
          else
             mSocketClient->Send(CFormatDataTransport::command_undefined());

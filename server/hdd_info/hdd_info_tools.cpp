@@ -16,12 +16,14 @@ struct TPartitionMeta {
 };
 #pragma pack(pop)
 
+#define BOOTABLE 0x80
+
 //------------------------------------------------------------------------------
 unsigned int GetCountPartition(char* aSector0)
 {
    unsigned int lCountPart = 0;
-   TPartitionMeta* aParitionMeta = (TPartitionMeta*)aSector0;
-   while (!!(aParitionMeta++)->type_part && lCountPart <= 4)
+   TPartitionMeta* aParitionMeta = (TPartitionMeta*)(aSector0 + 0x1BE);
+   while (!!(aParitionMeta++)->type_part && lCountPart < 4)
    {
       ++lCountPart;
    }
@@ -35,6 +37,13 @@ std::vector<CPartitionMeta::Ptr> GetContainerPartitionMeta(char* aSector0)
    memset((void *)&lPartMeta[0], 0, (sizeof(TPartitionMeta)* lPartMeta.size()));
    memcpy((void *)&lPartMeta[0], aSector0 + 0x1BE, (sizeof(TPartitionMeta)* lPartMeta.size()));
 
+   for (std::vector<TPartitionMeta>::iterator lIterator = lPartMeta.begin(); lIterator != lPartMeta.end(); ++lIterator)
+   {
+      bool lIsBoot = (lIterator->bootable == BOOTABLE);
+      unsigned char lType = lIterator->type_part;
+      unsigned long lSize = round((double)lIterator->sect_total / (1024 * 1024 * 1024 / VIXDISKLIB_SECTOR_SIZE));
+      lContainerPartition.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lIsBoot, lType, lSize)));
+   }
    return lContainerPartition;
 }
 
@@ -50,7 +59,7 @@ std::vector<CPartitionMeta::Ptr> GetContainerPartitionMeta(std::string aFileName
    if (lDiskLib.Connect(aFileNameVM))
    {
       CVix_VirtualDisk::Ptr lDisk = lDiskLib.GetVirtualDisk(aFileVirtualDisk);
-      GetContainerPartitionMeta(lDisk->ReadSector(0)->GetData());
+      lContainerPartition = GetContainerPartitionMeta(lDisk->ReadSector(0)->GetData());
    }
    if (lVMRun) lVM->RemoveSnapshot(lSnapshotName);
    return lContainerPartition;

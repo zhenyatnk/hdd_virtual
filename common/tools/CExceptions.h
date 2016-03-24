@@ -22,22 +22,40 @@ private:
 };
 std::wstring GetMessageWithSocketError(std::wstring aError);
 
-class vm_exception_w
+class vm_exception
    :public std::runtime_error
 {
 public:
-   explicit vm_exception_w(const std::wstring& aWhat)
+   explicit vm_exception(const std::string& aWhat)
    :mError(aWhat), runtime_error("vm_exception")
    { 
       mError = aWhat;
    }
-   std::wstring get_message() const
+   std::string get_message() const
    {
       return mError;
    }
 private:
-   std::wstring mError;
+   std::string mError;
 };
+
+class server_exception
+   :public std::runtime_error
+{
+public:
+   explicit server_exception(const std::string& aWhat)
+   :mError(aWhat), runtime_error("server_exception")
+   { 
+      mError = aWhat;
+   }
+   std::string get_message() const
+   {
+      return mError;
+   }
+private:
+   std::string mError;
+};
+
 
 
 #endif

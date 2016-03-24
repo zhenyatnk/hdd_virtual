@@ -23,6 +23,11 @@ public:
       return "ERROR";
    }
 
+   static std::string command_error(std::string aError)
+   {
+      return "ERROR: " + aError;
+   }
+
    static std::string command_wait()
    {
       return "WAIT";

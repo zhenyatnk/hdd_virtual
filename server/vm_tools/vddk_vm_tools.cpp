@@ -5,22 +5,21 @@
 #define VIXDISKLIB_VERSION_MAJOR 6
 #define VIXDISKLIB_VERSION_MINOR 0
 //------------------------------------------------------------------------------
-std::wstring GetVDDKErrorMessage(VixError aErrorCode)
+std::string GetVDDKErrorMessage(VixError aErrorCode)
 {
    char* lMessage = VixDiskLib_GetErrorText(aErrorCode, NULL);
    std::string str = lMessage;
-   std::wstring lMessageWString = std::wstring(str.begin(), str.end());
    VixDiskLib_FreeErrorText(lMessage);
-   return lMessageWString;
+   return str;
 }
 //------------------------------------------------------------------------------
 #define THROW_ERROR(vixError) \
-   throw vm_exception_w(GetVDDKErrorMessage(vixError));
+   throw vm_exception(GetVDDKErrorMessage(vixError));
 
 #define CHECK_AND_THROW(vixError)\
 if (VIX_FAILED((vixError))) \
 { \
-   throw vm_exception_w(GetVDDKErrorMessage(vixError)); \
+   throw vm_exception(GetVDDKErrorMessage(vixError)); \
 }
 
 //------------------------------------------------------------------------------

@@ -11,6 +11,10 @@ class TBuffer
 public:
    typedef typename SmartPtr<TBuffer>::Ptr Ptr;
 
+private:
+   TBuffer(const TBuffer&);
+   TBuffer& operator = (const TBuffer&);
+
 public:
    TBuffer()
    {
