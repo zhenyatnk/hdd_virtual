@@ -10,7 +10,6 @@ class CClientFactory
 public:
    CClientFactory(TConectionParms aParmConnection);
    ~CClientFactory();
-   virtual CPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex);
    virtual std::vector<CPartitionMeta::Ptr> CreatePartitionsMeta();
 
 private:
@@ -46,11 +45,10 @@ private:
          for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lPartObjects.begin(); lIterator != lPartObjects.end(); ++lIterator)
             lContainerObjects.push_back(*lIterator);
          this->GetSocket()->Send(CFormatDataTransport::command_wait());
-         lBuffer.Clear();
+         //lBuffer.Clear();
       }
       return lContainerObjects;
    }
-
 
 private:
    ISocket::Ptr mClientSocket;
@@ -66,11 +64,6 @@ CClientFactory::~CClientFactory()
 {
    if (!!mClientSocket)
       mClientSocket->Send(CFormatDataTransport::command_close());
-}
-
-CPartitionMeta::Ptr CClientFactory::CreatePartitionMeta(UINT8 aIndex)
-{
-   return this->GetObject<CPartitionMeta>();
 }
 
 std::vector<CPartitionMeta::Ptr> CClientFactory::CreatePartitionsMeta()

@@ -3,6 +3,7 @@
 
 #include <string>
 #include "DSmartPtr.h"
+#include "TypeDef.h"
 
 #define DEFAULT_BUFLEN 512
 #define NUMBER_PORT 25000
@@ -27,7 +28,7 @@ public:
    std::string mHostName;
    std::string mIP;
    int mPort;
-   unsigned int mFamily;
+   V_UINT16 mFamily;
 };
 //---------------------------------------------
 class ISocket

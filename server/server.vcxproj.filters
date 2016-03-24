@@ -30,5 +30,8 @@
     <ClCompile Include="hdd_info\hdd_info_tools.cpp">
       <Filter>hdd_info</Filter>
     </ClCompile>
+    <ClCompile Include="transport\CService.cpp">
+      <Filter>transport</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

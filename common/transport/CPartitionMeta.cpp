@@ -1,7 +1,7 @@
 ﻿#include ".\CPartitionMeta.h"
 
-CPartitionMeta::CPartitionMeta(bool aIsBoot, UINT8 aType, UINT32 aSize)
-:mIsBoot(aIsBoot), mType(aType), mSize(aSize)
+CPartitionMeta::CPartitionMeta(bool aIsBoot, V_UINT8 aType, V_UINT32 aSize)
+   :mIsBoot(aIsBoot), mType(aType), mSize(aSize)
 {}
 
 bool CPartitionMeta::IsBoot()
@@ -9,11 +9,11 @@ bool CPartitionMeta::IsBoot()
    return mIsBoot;
 }
 
-UINT8 CPartitionMeta::GetTypePart()
+V_UINT8 CPartitionMeta::GetTypePart()
 {
    return mType;
 }
-UINT32 CPartitionMeta::GetSizeInSector()
+V_UINT32 CPartitionMeta::GetSizeInSector()
 {
    return mSize;
 }

@@ -11,17 +11,17 @@ public:
 	typedef SmartPtr<CPartitionMeta>::Ptr Ptr;
 
 public:
-	CPartitionMeta(bool aIsBoot, UINT8 aType, UINT32 aSize);
+   CPartitionMeta(bool aIsBoot, V_UINT8 aType, V_UINT32 aSize);
 
 	bool IsBoot();
-	UINT8 GetTypePart();
-	UINT32 GetSizeInSector();
+   V_UINT8 GetTypePart();
+   V_UINT32 GetSizeInSector();
 
 	NAME_CLASS(CPartitionMeta)
 
 private:
 	bool mIsBoot;
-	UINT8 mType;
-	UINT32 mSize;
+   V_UINT8 mType;
+   V_UINT32 mSize;
 };
 #endif

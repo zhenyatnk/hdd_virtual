@@ -3,6 +3,7 @@
 
 #include <string>
 #include "DSmartPtr.h"
+#include "TypeDef.h"
 
 //-------------------------------------------------------------
 template <int aBufferSize>
@@ -18,12 +19,18 @@ private:
 public:
    TBuffer()
    {
+      mData = new V_UINT8[aBufferSize + 1];
       Clear();
+   }
+
+   ~TBuffer()
+   {
+      delete [] mData;
    }
 
    void Clear()
    {
-      memset(mData, 0, aBufferSize);
+      memset(mData, 0, aBufferSize + 1);
    }
 
    std::string ToString()
@@ -36,13 +43,13 @@ public:
       return (char*)mData;
    }
 
-   UINT32 GetSize()
+   V_UINT32 GetSize()
    {
       return aBufferSize;
    }
 
 private:
-   UINT8 mData[aBufferSize];
+   V_UINT8 *mData;
 };
 
 

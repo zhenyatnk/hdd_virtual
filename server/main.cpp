@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include "winsock.h"
 #include ".\transport\CService.h"
+#include "..\common\tools\CExceptions.h"
 
 int main(int argc, char* argv[])
 {

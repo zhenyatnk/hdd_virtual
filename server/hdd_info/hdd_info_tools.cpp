@@ -19,9 +19,9 @@ struct TPartitionMeta {
 #define BOOTABLE 0x80
 
 //------------------------------------------------------------------------------
-unsigned int GetCountPartition(char* aSector0)
+V_UINT16 GetCountPartition(char* aSector0)
 {
-   unsigned int lCountPart = 0;
+   V_UINT16 lCountPart = 0;
    TPartitionMeta* aParitionMeta = (TPartitionMeta*)(aSector0 + 0x1BE);
    while (!!(aParitionMeta++)->type_part && lCountPart < 4)
    {
@@ -40,8 +40,8 @@ std::vector<CPartitionMeta::Ptr> GetContainerPartitionMeta(char* aSector0)
    for (std::vector<TPartitionMeta>::iterator lIterator = lPartMeta.begin(); lIterator != lPartMeta.end(); ++lIterator)
    {
       bool lIsBoot = (lIterator->bootable == BOOTABLE);
-      unsigned char lType = lIterator->type_part;
-      unsigned long lSize = round((double)lIterator->sect_total / (1024 * 1024 * 1024 / VIXDISKLIB_SECTOR_SIZE));
+      V_UINT8 lType = lIterator->type_part;
+      V_UINT32 lSize = round((double)lIterator->sect_total / (1024 * 1024 * 1024 / VIXDISKLIB_SECTOR_SIZE));
       lContainerPartition.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lIsBoot, lType, lSize)));
    }
    return lContainerPartition;

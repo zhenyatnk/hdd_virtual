@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="hdd_info\hdd_info_tools.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="transport\CService.cpp" />
     <ClCompile Include="transport\CSObjectFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

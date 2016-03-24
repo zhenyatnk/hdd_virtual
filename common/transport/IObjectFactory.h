@@ -11,7 +11,6 @@ public:
 public:
 	virtual ~IObjectFactory(){}
 
-   virtual CPartitionMeta::Ptr CreatePartitionMeta(UINT8 aIndex) = 0;
    virtual std::vector<CPartitionMeta::Ptr> CreatePartitionsMeta() = 0;
 };
 

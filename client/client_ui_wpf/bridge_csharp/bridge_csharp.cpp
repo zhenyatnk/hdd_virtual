@@ -91,19 +91,7 @@ namespace bridge_csharp
       if (!!mObjectFactory)
          delete mObjectFactory;
    }
-
-   CREFPartitionMeta^ CREFFactoryObject::CreatePartitionMeta(UInt16 aIndex)
-   {
-      try
-      {
-         return Converters::ConvertTo(GetFactory()->CreatePartitionMeta(aIndex));
-      }
-      catch (server_exception &e)
-      {
-         throw gcnew CREFServerException(gcnew System::String(e.get_message().c_str()));
-      }
-   }
-
+   
    System::Collections::ArrayList^ CREFFactoryObject::CreatePartitionsMeta()
    {
       try

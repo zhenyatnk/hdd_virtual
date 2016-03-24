@@ -49,7 +49,6 @@ namespace bridge_csharp
       CREFFactoryObject(CREFConectionParms^ aParms);
       ~CREFFactoryObject();
 
-      CREFPartitionMeta^ CreatePartitionMeta(UInt16 aIndex);
       System::Collections::ArrayList^ CreatePartitionsMeta();
 
       void CloseChannel();
