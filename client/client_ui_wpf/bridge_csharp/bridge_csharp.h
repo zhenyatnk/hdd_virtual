@@ -42,13 +42,15 @@ namespace bridge_csharp
    public ref class CREFPartitionMeta
    {
    public:
-      CREFPartitionMeta(bool aIsBoot, UInt16 aType, UInt32 aSize);
+      CREFPartitionMeta(bool aIsBoot, bool aIsExtend, UInt16 aType, UInt32 aSize);
 
       bool IsBoot();
+      bool IsExtend();
       UInt16 GetTypePart();
       UInt32 GetSizeInSector();
 
    private:
+      bool mIsExtend;
       bool mIsBoot;
       UInt16 mType;
       UInt32 mSize;

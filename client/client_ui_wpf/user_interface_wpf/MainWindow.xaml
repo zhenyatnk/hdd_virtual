@@ -10,16 +10,16 @@
     	</Grid.RowDefinitions>
     	<Grid.ColumnDefinitions>
     		<ColumnDefinition Width="412*"/>
-    		<ColumnDefinition Width="105*"/>
     	</Grid.ColumnDefinitions>
         <ListView x:Name="lvHDDInfoListView"  ItemsSource="{Binding HDDInfo}" Margin="0,0,0,0" Grid.Row="1">
     		<ListView.View>
     			<GridView>
-                    <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="№" DisplayMemberBinding="{Binding Number}"/>
                     <GridViewColumn Header="Загрузочный" DisplayMemberBinding="{Binding Bootable}"/>
                     <GridViewColumn Header="Размер (МБ)" DisplayMemberBinding="{Binding Size}"/>
     				     <GridViewColumn Header="Файловая система" DisplayMemberBinding="{Binding Type}"/>
-    			</GridView>
+                   <GridViewColumn Header="Расширяемый" DisplayMemberBinding="{Binding Extend}"/>
+            </GridView>
     		</ListView.View>
     	</ListView>
       <ListBox x:Name="lbListError" Margin="0,0,0,0" Grid.Row="2">

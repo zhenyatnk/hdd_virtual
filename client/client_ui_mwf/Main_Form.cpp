@@ -45,15 +45,19 @@ namespace UserInterface
       try
       {
          lvHDDInfoListView->Items->Clear();
+         V_UINT32 lNumberDisk = 1;
          std::vector<CPartitionMeta::Ptr> lHDDMetas = GetFactoryObjects()->CreatePartitionsMeta();
          for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lHDDMetas.begin(); lIterator != lHDDMetas.end(); ++lIterator)
          {
-            ListViewItem ^lHDDInfo = gcnew ListViewItem("HDD");
+            ListViewItem ^lHDDInfo = gcnew ListViewItem(System::Convert::ToString((int)lNumberDisk));
             if ((*lIterator)->IsBoot())  lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, "*"));
             else                     lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, ""));
             lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)(*lIterator)->GetSizeInSector())));
             lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, gcnew System::String(ConvertTypeSystem((*lIterator)->GetTypePart()).c_str())));
+            if ((*lIterator)->IsExtend())  lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, "*"));
+            else                           lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, ""));
             lvHDDInfoListView->Items->Add(lHDDInfo);
+            ++lNumberDisk;
          }
       }
       catch (server_exception &e)
@@ -97,10 +101,11 @@ namespace UserInterface
       this->components = (gcnew System::ComponentModel::Container());
       System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Main_Form::typeid));
       this->lvHDDInfoListView = (gcnew System::Windows::Forms::ListView());
-      this->chHeader_HddLabel = (gcnew System::Windows::Forms::ColumnHeader());
+      this->chHeader_HddNum = (gcnew System::Windows::Forms::ColumnHeader());
       this->chHeader_Bootable = (gcnew System::Windows::Forms::ColumnHeader());
       this->chHeader_Size = (gcnew System::Windows::Forms::ColumnHeader());
       this->chHeader_FileSystem = (gcnew System::Windows::Forms::ColumnHeader());
+      this->chHeader_Extend = (gcnew System::Windows::Forms::ColumnHeader());
       this->imageList1 = (gcnew System::Windows::Forms::ImageList(this->components));
       this->msTopMenuStrip = (gcnew System::Windows::Forms::MenuStrip());
       this->smiSettingsMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -118,23 +123,23 @@ namespace UserInterface
       // 
       // lvHDDInfoListView
       // 
-      this->lvHDDInfoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(4) {
-         this->chHeader_HddLabel,
-            this->chHeader_Bootable, this->chHeader_Size, this->chHeader_FileSystem
+      this->lvHDDInfoListView->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(5) {
+         this->chHeader_HddNum,
+            this->chHeader_Bootable, this->chHeader_Size, this->chHeader_FileSystem, this->chHeader_Extend
       });
       this->lvHDDInfoListView->Dock = System::Windows::Forms::DockStyle::Fill;
       this->lvHDDInfoListView->LargeImageList = this->imageList1;
       this->lvHDDInfoListView->Location = System::Drawing::Point(0, 0);
       this->lvHDDInfoListView->Name = L"lvHDDInfoListView";
-      this->lvHDDInfoListView->Size = System::Drawing::Size(366, 162);
+      this->lvHDDInfoListView->Size = System::Drawing::Size(516, 162);
       this->lvHDDInfoListView->TabIndex = 0;
       this->lvHDDInfoListView->UseCompatibleStateImageBehavior = false;
       this->lvHDDInfoListView->View = System::Windows::Forms::View::Details;
       // 
-      // chHeader_HddLabel
+      // chHeader_HddNum
       // 
-      this->chHeader_HddLabel->Text = L"Название";
-      this->chHeader_HddLabel->Width = 83;
+      this->chHeader_HddNum->Text = L"№";
+      this->chHeader_HddNum->Width = 27;
       // 
       // chHeader_Bootable
       // 
@@ -150,6 +155,10 @@ namespace UserInterface
       // 
       this->chHeader_FileSystem->Text = L"Файловая система";
       this->chHeader_FileSystem->Width = 113;
+      // 
+      // chHeader_Extend
+      // 
+      this->chHeader_Extend->Text = L"Расширяемый";
       // 
       // imageList1
       // 
@@ -195,7 +204,7 @@ namespace UserInterface
       // scMainSplitContainer.Panel2
       // 
       this->scMainSplitContainer->Panel2->Controls->Add(this->lbLogListBox);
-      this->scMainSplitContainer->Size = System::Drawing::Size(366, 231);
+      this->scMainSplitContainer->Size = System::Drawing::Size(516, 231);
       this->scMainSplitContainer->SplitterDistance = 162;
       this->scMainSplitContainer->TabIndex = 3;
       // 
@@ -205,16 +214,16 @@ namespace UserInterface
       this->lbLogListBox->FormattingEnabled = true;
       this->lbLogListBox->Location = System::Drawing::Point(0, 0);
       this->lbLogListBox->Name = L"lbLogListBox";
-      this->lbLogListBox->Size = System::Drawing::Size(366, 65);
+      this->lbLogListBox->Size = System::Drawing::Size(516, 65);
       this->lbLogListBox->TabIndex = 0;
       // 
       // tlFullInformationLayot
       // 
-      this->tlFullInformationLayot->ColumnCount = 2;
+      this->tlFullInformationLayot->ColumnCount = 1;
       this->tlFullInformationLayot->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Percent,
          100)));
       this->tlFullInformationLayot->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute,
-         150)));
+         20)));
       this->tlFullInformationLayot->Controls->Add(this->scMainSplitContainer, 0, 0);
       this->tlFullInformationLayot->Dock = System::Windows::Forms::DockStyle::Fill;
       this->tlFullInformationLayot->Location = System::Drawing::Point(0, 24);

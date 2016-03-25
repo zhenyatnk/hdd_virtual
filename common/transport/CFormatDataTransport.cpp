@@ -4,9 +4,10 @@ std::string ConverterToStr::Convert(CPartitionMeta::Ptr aObject)
 {
    std::stringstream lStream;
    lStream << CPartitionMeta::GetNameObject() << ConverterToStr::Separator;
-   lStream << "SizeInSector" << " " << std::to_string(aObject->GetSizeInSector()) << ConverterToStr::Separator;
+   lStream << "SizeInMB" << " " << std::to_string(aObject->GetSizeInSector()) << ConverterToStr::Separator;
    lStream << "TypePart" << " " << std::to_string(aObject->GetTypePart()) << ConverterToStr::Separator;
-   lStream << "Boot" << " " << aObject->IsBoot();
+   lStream << "Boot" << " " << aObject->IsBoot() << ConverterToStr::Separator;
+   lStream << "Extend" << " " << aObject->IsExtend();
    return lStream.str();
 }
 

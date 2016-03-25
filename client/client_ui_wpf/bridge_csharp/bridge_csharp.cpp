@@ -12,7 +12,7 @@ namespace bridge_csharp
    {
       CREFPartitionMeta^ ConvertTo(CPartitionMeta::Ptr aObj)
       {
-         return gcnew CREFPartitionMeta(aObj->IsBoot(), aObj->GetTypePart(), aObj->GetSizeInSector());
+         return gcnew CREFPartitionMeta(aObj->IsBoot(), aObj->IsExtend(), aObj->GetTypePart(), aObj->GetSizeInSector());
       }
 
       System::Collections::ArrayList^ ConvertTo(std::vector<CPartitionMeta::Ptr> aContainerObjs)
@@ -71,13 +71,18 @@ namespace bridge_csharp
       :mHostName(""), mIP(""), mPort(0), mFamily(0)
    {}
    //-------------------------------------------------------------------------------
-   CREFPartitionMeta::CREFPartitionMeta(bool aIsBoot, UInt16 aType, UInt32 aSize)
-      : mIsBoot(aIsBoot), mType(aType), mSize(aSize)
+   CREFPartitionMeta::CREFPartitionMeta(bool aIsBoot, bool aIsExtend, UInt16 aType, UInt32 aSize)
+      : mIsBoot(aIsBoot), mIsExtend(aIsExtend), mType(aType), mSize(aSize)
    {}
 
    bool CREFPartitionMeta::IsBoot()
    {
       return mIsBoot;
+   }
+
+   bool CREFPartitionMeta::IsExtend()
+   {
+      return mIsExtend;
    }
 
    UInt16 CREFPartitionMeta::GetTypePart()

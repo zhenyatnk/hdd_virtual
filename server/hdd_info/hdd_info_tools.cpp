@@ -42,7 +42,7 @@ std::vector<CPartitionMeta::Ptr> GetContainerPartitionMetaExt(CVix_VirtualDisk::
       bool lIsBoot = (lPartMeta[0].bootable == BOOTABLE);
       V_UINT8 lType = lPartMeta[0].type_part;
       V_UINT32 lSize = round((double)lPartMeta[0].sect_total / (1024 * 1024 / VIXDISKLIB_SECTOR_SIZE));
-      lContainerPartitionExt.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lIsBoot, lType, lSize)));
+      lContainerPartitionExt.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lIsBoot, true, lType, lSize)));
 
       if (!lPartMeta[1].type_part)
          break;
@@ -75,7 +75,7 @@ std::vector<CPartitionMeta::Ptr> GetContainerPartitionMeta(CVix_VirtualDisk::Ptr
          bool lIsBoot = (lIterator->bootable == BOOTABLE);
          V_UINT8 lType = lIterator->type_part;
          V_UINT32 lSize = round((double)lIterator->sect_total / (1024 * 1024 / VIXDISKLIB_SECTOR_SIZE));
-         lContainerPartition.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lIsBoot, lType, lSize)));
+         lContainerPartition.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lIsBoot, false, lType, lSize)));
       }
    }
    return lContainerPartition;

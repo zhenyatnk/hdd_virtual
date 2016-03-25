@@ -98,10 +98,12 @@ public:
          V_UINT32 lSizeInSector;
          V_UINT32 lTypePart;
          bool lBoot;
+         bool lExtend;
          lStream >> lName; lStream >> lSizeInSector;
          lStream >> lName; lStream >> lTypePart;
          lStream >> lName; lStream >> lBoot;
-         lObject = CPartitionMeta::Ptr(new CPartitionMeta(lBoot, (V_UINT8)lTypePart, lSizeInSector));
+         lStream >> lName; lStream >> lExtend;
+         lObject = CPartitionMeta::Ptr(new CPartitionMeta(lBoot, lExtend, (V_UINT8)lTypePart, lSizeInSector));
       }
       return lObject;
    }
@@ -121,10 +123,12 @@ public:
             V_UINT32 lSizeInSector;
             V_UINT32 lTypePart;
             bool lBoot;
+            bool lExtend;
             lStream >> lName; lStream >> lSizeInSector;
             lStream >> lName; lStream >> lTypePart;
             lStream >> lName; lStream >> lBoot;
-            lContainerObjects.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lBoot, (V_UINT8)lTypePart, lSizeInSector)));
+            lStream >> lName; lStream >> lExtend;
+            lContainerObjects.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lBoot, lExtend, (V_UINT8)lTypePart, lSizeInSector)));
          }
       }
       return lContainerObjects;

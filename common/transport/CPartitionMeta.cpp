@@ -1,13 +1,18 @@
 ﻿#include ".\CPartitionMeta.h"
 
 //------------------------------------------------------------------------------
-CPartitionMeta::CPartitionMeta(bool aIsBoot, V_UINT8 aType, V_UINT32 aSize)
-   :mIsBoot(aIsBoot), mType(aType), mSize(aSize)
+CPartitionMeta::CPartitionMeta(bool aIsBoot, bool aIsExtend, V_UINT8 aType, V_UINT32 aSize)
+:mIsBoot(aIsBoot), mIsExtend(aIsExtend), mType(aType), mSize(aSize)
 {}
 
 bool CPartitionMeta::IsBoot()
 {
    return mIsBoot;
+}
+
+bool CPartitionMeta::IsExtend()
+{
+   return mIsExtend;
 }
 
 V_UINT8 CPartitionMeta::GetTypePart()

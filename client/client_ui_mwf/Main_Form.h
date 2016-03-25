@@ -38,12 +38,14 @@ namespace UserInterface {
       System::Windows::Forms::SplitContainer^  scMainSplitContainer;
       System::Windows::Forms::ListBox^  lbLogListBox;
       System::Windows::Forms::ImageList^  imageList1;
-      System::Windows::Forms::ColumnHeader^  chHeader_HddLabel;
+   private: System::Windows::Forms::ColumnHeader^  chHeader_HddNum;
+
       System::Windows::Forms::ColumnHeader^  chHeader_Bootable;
       System::Windows::Forms::ColumnHeader^  chHeader_Size;
       System::Windows::Forms::ColumnHeader^  chHeader_FileSystem;
       System::Windows::Forms::TableLayoutPanel^  tlFullInformationLayot;
-      System::ComponentModel::IContainer^  components;
+   private: System::Windows::Forms::ColumnHeader^  chHeader_Extend;
+            System::ComponentModel::IContainer^  components;
 
    };
 }

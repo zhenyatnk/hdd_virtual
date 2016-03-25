@@ -64,18 +64,20 @@ namespace client_wpf
          {
             HDDInfo = new List<ListHDDElement>();
             ArrayList lContainerMeta = mFactoryObject.CreatePartitionsMeta();
+            uint lNumberDisk = 1;
             foreach (Object lObj in lContainerMeta)
             {
                CREFPartitionMeta lHDDMeta = (CREFPartitionMeta)lObj;
                ListHDDElement lHDD = new ListHDDElement();
-               lHDD.Name = "HDD";
-               if (lHDDMeta.IsBoot())
-                  lHDD.Bootable = "*";
-               else
-                  lHDD.Bootable = "";
+               lHDD.Number = lNumberDisk;
+               if (lHDDMeta.IsBoot())  lHDD.Bootable = "*";
+               else                    lHDD.Bootable = "";
                lHDD.Size = lHDDMeta.GetSizeInSector();
                lHDD.Type = REFConvertTypeSystem.Convert(lHDDMeta.GetTypePart());
+               if (lHDDMeta.IsExtend()) lHDD.Extend = "*";
+               else                     lHDD.Extend = "";
                HDDInfo.Add(lHDD);
+               ++lNumberDisk;
             }
             this.DataContext = this;
          }
@@ -102,10 +104,11 @@ namespace client_wpf
 
       public class ListHDDElement
       {
-         public string Name { get; set; }
+         public uint Number { get; set; }
          public string Bootable { get; set; }
          public uint Size { get; set; }
          public string Type { get; set; }
+         public string Extend { get; set; }
       }
       public IList<ListHDDElement> HDDInfo { get; set; }
       public IList<System.String> ErrorLog { get; set; }
