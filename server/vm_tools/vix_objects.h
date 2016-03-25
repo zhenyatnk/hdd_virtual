@@ -75,5 +75,8 @@ public:
 private:
    VixHandle mHadleHost;
 };
+
+std::vector<std::string> GetNameFilesVMDK(std::string aFileNameVM);
+
 //------------------------------------------------------------------------------
 #endif

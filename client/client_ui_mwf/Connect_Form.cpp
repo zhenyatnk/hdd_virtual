@@ -7,10 +7,11 @@
 namespace UserInterface
 {
 
-   Connect_Form::Connect_Form(TConectionParms aParmConnection)
+   Connect_Form::Connect_Form(TConectionParms aParmConnection, std::string aFileNameVM)
    {
       InitializeComponent();
       InitValueControls(aParmConnection);
+      InitFileNameControls(aFileNameVM);
    }
 
    Connect_Form::~Connect_Form()
@@ -33,6 +34,11 @@ namespace UserInterface
       return lParms;
    }
 
+   std::string Connect_Form::GetFileNameVM()
+   {
+      return msclr::interop::marshal_as<std::string>(tbFilenameVM->Text);
+   }
+
    void Connect_Form::InitValueControls(TConectionParms aParmConnection)
    {
       std::stringstream lStream_ip(aParmConnection.mIP);
@@ -44,6 +50,11 @@ namespace UserInterface
       if (std::getline(lStream_ip, lIPPart, '.'))   nudIP4->Text = gcnew System::String(lIPPart.c_str());
       nudNumberPort->Text = System::Convert::ToString(aParmConnection.mPort);
    }
+   
+   void Connect_Form::InitFileNameControls(std::string aFileNameVM)
+   {
+      tbFilenameVM->Text = gcnew System::String(aFileNameVM.c_str());
+   }
 
 #pragma region Windows Form Designer generated code
    void Connect_Form::InitializeComponent(void)
@@ -53,6 +64,8 @@ namespace UserInterface
       this->bOk = (gcnew System::Windows::Forms::Button());
       this->bCancel = (gcnew System::Windows::Forms::Button());
       this->pnPanelParameters = (gcnew System::Windows::Forms::Panel());
+      this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+      this->tbFilenameVM = (gcnew System::Windows::Forms::TextBox());
       this->gbPort = (gcnew System::Windows::Forms::GroupBox());
       this->nudNumberPort = (gcnew System::Windows::Forms::NumericUpDown());
       this->gbIP = (gcnew System::Windows::Forms::GroupBox());
@@ -66,6 +79,7 @@ namespace UserInterface
       this->tlMainTableLayot->SuspendLayout();
       this->tlBottomTableLayout->SuspendLayout();
       this->pnPanelParameters->SuspendLayout();
+      this->groupBox1->SuspendLayout();
       this->gbPort->SuspendLayout();
       (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudNumberPort))->BeginInit();
       this->gbIP->SuspendLayout();
@@ -88,7 +102,7 @@ namespace UserInterface
       this->tlMainTableLayot->RowCount = 2;
       this->tlMainTableLayot->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
       this->tlMainTableLayot->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 35)));
-      this->tlMainTableLayot->Size = System::Drawing::Size(254, 158);
+      this->tlMainTableLayot->Size = System::Drawing::Size(254, 218);
       this->tlMainTableLayot->TabIndex = 0;
       // 
       // tlBottomTableLayout
@@ -103,7 +117,7 @@ namespace UserInterface
       this->tlBottomTableLayout->Controls->Add(this->bOk, 1, 0);
       this->tlBottomTableLayout->Controls->Add(this->bCancel, 2, 0);
       this->tlBottomTableLayout->Dock = System::Windows::Forms::DockStyle::Fill;
-      this->tlBottomTableLayout->Location = System::Drawing::Point(3, 126);
+      this->tlBottomTableLayout->Location = System::Drawing::Point(3, 186);
       this->tlBottomTableLayout->Name = L"tlBottomTableLayout";
       this->tlBottomTableLayout->RowCount = 1;
       this->tlBottomTableLayout->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent,
@@ -135,13 +149,31 @@ namespace UserInterface
       // 
       // pnPanelParameters
       // 
+      this->pnPanelParameters->Controls->Add(this->groupBox1);
       this->pnPanelParameters->Controls->Add(this->gbPort);
       this->pnPanelParameters->Controls->Add(this->gbIP);
       this->pnPanelParameters->Dock = System::Windows::Forms::DockStyle::Fill;
       this->pnPanelParameters->Location = System::Drawing::Point(3, 3);
       this->pnPanelParameters->Name = L"pnPanelParameters";
-      this->pnPanelParameters->Size = System::Drawing::Size(248, 117);
+      this->pnPanelParameters->Size = System::Drawing::Size(248, 177);
       this->pnPanelParameters->TabIndex = 1;
+      // 
+      // groupBox1
+      // 
+      this->groupBox1->Controls->Add(this->tbFilenameVM);
+      this->groupBox1->Location = System::Drawing::Point(10, 120);
+      this->groupBox1->Name = L"groupBox1";
+      this->groupBox1->Size = System::Drawing::Size(228, 52);
+      this->groupBox1->TabIndex = 3;
+      this->groupBox1->TabStop = false;
+      this->groupBox1->Text = L"Путь к файлу виртуальной машины";
+      // 
+      // tbFilenameVM
+      // 
+      this->tbFilenameVM->Location = System::Drawing::Point(10, 20);
+      this->tbFilenameVM->Name = L"tbFilenameVM";
+      this->tbFilenameVM->Size = System::Drawing::Size(206, 20);
+      this->tbFilenameVM->TabIndex = 0;
       // 
       // gbPort
       // 
@@ -155,6 +187,7 @@ namespace UserInterface
       // 
       // nudNumberPort
       // 
+      this->nudNumberPort->Enabled = false;
       this->nudNumberPort->ImeMode = System::Windows::Forms::ImeMode::NoControl;
       this->nudNumberPort->Location = System::Drawing::Point(10, 19);
       this->nudNumberPort->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) { 65535, 0, 0, 0 });
@@ -252,7 +285,7 @@ namespace UserInterface
       this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
       this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
       this->CancelButton = this->bCancel;
-      this->ClientSize = System::Drawing::Size(254, 158);
+      this->ClientSize = System::Drawing::Size(254, 218);
       this->Controls->Add(this->tlMainTableLayot);
       this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedToolWindow;
       this->Name = L"Connect_Form";
@@ -261,6 +294,8 @@ namespace UserInterface
       this->tlMainTableLayot->ResumeLayout(false);
       this->tlBottomTableLayout->ResumeLayout(false);
       this->pnPanelParameters->ResumeLayout(false);
+      this->groupBox1->ResumeLayout(false);
+      this->groupBox1->PerformLayout();
       this->gbPort->ResumeLayout(false);
       (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->nudNumberPort))->EndInit();
       this->gbIP->ResumeLayout(false);

@@ -102,8 +102,8 @@ namespace bridge_csharp
 
    //-------------------------------------------------------------------------------
 
-   CREFFactoryObject::CREFFactoryObject(CREFConectionParms^ aParms)
-      :mParms(aParms), mObjectFactory(NULL)
+   CREFFactoryObject::CREFFactoryObject(CREFConectionParms^ aParms, System::String ^aFileNameVM)
+      :mParms(aParms), mFileNameVM(aFileNameVM), mObjectFactory(NULL)
    {}
 
    CREFFactoryObject::~CREFFactoryObject()
@@ -140,13 +140,18 @@ namespace bridge_csharp
    IObjectFactory* CREFFactoryObject::GetFactory()
    {
       if (!mObjectFactory)
-         mObjectFactory = CreateClientFactoryNptr(Converters::ConvertTo(mParms));
+         mObjectFactory = CreateClientFactoryNptr(Converters::ConvertTo(mParms), Converters::ConvertTo(mFileNameVM));
       return mObjectFactory;
    }
 
    System::String^ CREFConfigFile::GetDefaultIP()
    {
       return Converters::ConvertTo(CConfigForms::GetInstance().GetDefaultIP());
+   }
+
+   System::String^ CREFConfigFile::GetDefaultFileNameVM()
+   {
+      return Converters::ConvertTo(CConfigForms::GetInstance().GetDefaultFileNameVM());
    }
 
    Int32 CREFConfigFile::GetDefaultPort()
@@ -157,6 +162,11 @@ namespace bridge_csharp
    void CREFConfigFile::SetDefaultIP(System::String^ aIP)
    {
       CConfigForms::GetInstance().SetDefaultIP(Converters::ConvertTo(aIP));
+   }
+
+   void CREFConfigFile::SetDefaultFileNameVM(System::String^ aFileNameVM)
+   {
+      CConfigForms::GetInstance().SetDefaultFileNameVM(Converters::ConvertTo(aFileNameVM));
    }
 
    void CREFConfigFile::SetDefaultPort(Int32 aPort)

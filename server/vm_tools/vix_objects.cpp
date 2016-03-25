@@ -1,5 +1,8 @@
-﻿#include "vix_objects.h"
+﻿#include <sstream>
+#include <fstream>
+#include "vix_objects.h"
 #include "../../../common/tools/CExceptions.h"
+#include "../../../common/tools/CFIleName.h"
 
 //------------------------------------------------------------------------------
 #define  CONNTYPE    VIX_SERVICEPROVIDER_VMWARE_WORKSTATION
@@ -224,4 +227,33 @@ CVix_VirtualMachine::Ptr CVix_Host::GetVM(std::string aFileNameVM)
    Vix_ReleaseHandle(jobHandle);
    CHECK_AND_THROW(err);
    return CVix_VirtualMachine::Ptr(new CVix_VirtualMachine(vmHandle));
+}
+
+//------------------------------------------------------------------------------
+std::vector<std::string> GetNameFilesVMDK(std::string aFileNameVM)
+{
+   CFileName lFileNameVM(aFileNameVM);
+   std::vector<std::string> lContainerNames;
+   std::ifstream lStream;
+   lStream.open(aFileNameVM);
+   std::string lLine;
+   if (lStream.is_open())
+   {
+      while (getline(lStream, lLine))
+      {
+         if (std::string::npos != lLine.find(".vmdk"))
+         {
+            std::string::size_type lPosDelim = lLine.find("=");
+            if (std::string::npos != lPosDelim)
+            {
+               std::string lFileNameVMDK = lLine.substr(lPosDelim + 3); //delim + separator + "
+               lFileNameVMDK = lFileNameVMDK.substr(0, lFileNameVMDK.size() - 1); // "
+               CFileName lFullFileNameVMDK(lFileNameVM.GetPath(), lFileNameVMDK);
+               lContainerNames.push_back(lFullFileNameVMDK.GetFullFileName());
+            }
+               
+         }
+      }
+   }
+   return lContainerNames;
 }

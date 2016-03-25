@@ -9,6 +9,9 @@
 class CFormatDataTransport
 {
 public:
+   static const char Separator = '\n';
+
+public:
    static std::string command_close()
    {
       return "CLOSE";
@@ -36,6 +39,16 @@ public:
    static std::string command_undefined()
    {
       return "UNDEFINED COMMAND";
+   }
+
+   static std::string command_file_name_vm()
+   {
+      return CFormatDataTransport::command_file_name_vm("");
+   }
+
+   static std::string command_file_name_vm(std::string aFileNameVM)
+   {
+      return "FILENAME_VM: " + aFileNameVM;
    }
 
    template <class Type>

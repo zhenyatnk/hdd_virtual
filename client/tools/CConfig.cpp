@@ -10,6 +10,7 @@ public:
    static std::string config_ip();
    static std::string config_port();
    static std::string config_separator();
+   static std::string config_filename_vm();
 };
 
 std::string CConfigKeywords::config_ip()
@@ -20,6 +21,11 @@ std::string CConfigKeywords::config_ip()
 std::string CConfigKeywords::config_port()
 {
    return "PORT";
+}
+
+std::string CConfigKeywords::config_filename_vm()
+{
+   return "FILENAME_VM";
 }
 
 std::string CConfigKeywords::config_separator()
@@ -61,6 +67,11 @@ std::string CConfigForms::GetDefaultIP()
    return mDefaultIP;
 }
 
+std::string CConfigForms::GetDefaultFileNameVM()
+{
+   return mDefaultFileNameVM;
+}
+
 UINT32 CConfigForms::GetDefaultPort()
 {
    return mDefaultPort;
@@ -70,6 +81,12 @@ void CConfigForms::SetDefaultIP(std::string aDefaultIP)
 {
    mDefaultIP = aDefaultIP;
 }
+
+void CConfigForms::SetDefaultFileNameVM(std::string aDefaultFileNameVM)
+{
+   mDefaultFileNameVM = aDefaultFileNameVM;
+}
+
 void CConfigForms::SetDefaultPort(UINT32 aDefaultPort)
 {
    mDefaultPort = aDefaultPort;
@@ -84,6 +101,7 @@ void CConfigForms::ParseLine(std::string aLine)
       std::string lValue = aLine.substr(lPos + 1, aLine.size() - lPos);
       if (CConfigKeywords::config_ip() == lKey)         this->SetDefaultIP(lValue);
       else if (CConfigKeywords::config_port() == lKey)  this->SetDefaultPort(std::stol(lValue));
+      else if (CConfigKeywords::config_filename_vm() == lKey)  this->SetDefaultFileNameVM(lValue);
    }
 }
 
@@ -100,6 +118,7 @@ void CConfigForms::LoadConfig()
 void CConfigForms::LoadToDefaultValue()
 {
    mDefaultIP = "127.0.0.1";
+   mDefaultFileNameVM = "";
    mDefaultPort = NUMBER_PORT;
 }
 
@@ -110,6 +129,7 @@ void CConfigForms::SaveConfig()
    {
       lStream << CConfigKeywords::config_ip() << CConfigKeywords::config_separator() << this->GetDefaultIP() << std::endl;
       lStream << CConfigKeywords::config_port() << CConfigKeywords::config_separator() << std::to_string(this->GetDefaultPort()) << std::endl;
+      lStream << CConfigKeywords::config_filename_vm() << CConfigKeywords::config_separator() << this->GetDefaultFileNameVM() << std::endl;
       lStream.close();
    }
 }

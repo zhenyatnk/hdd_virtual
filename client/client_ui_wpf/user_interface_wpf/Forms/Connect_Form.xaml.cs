@@ -21,7 +21,7 @@ namespace ConectSettings
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(CREFConectionParms aParm)
+        public MainWindow(CREFConectionParms aParm, System.String aFileNameVM)
         {
             InitializeComponent();
             System.String[] lIP = aParm.mIP.Split('.');
@@ -33,6 +33,7 @@ namespace ConectSettings
                 IP4.Value = Convert.ToUInt16(lIP[3]);
             }
             Port.Value = aParm.mPort;
+            FileNameVM.Text = aFileNameVM;
         }
         public CREFConectionParms GetParametersConnection()
         {
@@ -44,6 +45,10 @@ namespace ConectSettings
             lParms.mPort = (int)Port.Value;
             lParms.mFamily = 2;
             return lParms;
+        }
+        public System.String GetFileNameVM()
+        {
+           return FileNameVM.Text;
         }
 
         private void button_OK_Click(object sender, RoutedEventArgs e)

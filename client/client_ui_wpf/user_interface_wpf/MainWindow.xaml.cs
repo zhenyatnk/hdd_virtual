@@ -25,7 +25,7 @@ namespace client_wpf
          InitializeComponent();
          ErrorLog = new List<System.String>();
          if (!ChangeParmsConnection())
-            mFactoryObject = new CREFFactoryObject(mParmConnection);
+            mFactoryObject = new CREFFactoryObject(mParmConnection, mFileNameVM);
          ReloadInfoHDDToListView();
       }
       private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -37,16 +37,18 @@ namespace client_wpf
       }
       private bool ChangeParmsConnection()
       {
-         ConectSettings.MainWindow lForm = new ConectSettings.MainWindow(mParmConnection);
+         ConectSettings.MainWindow lForm = new ConectSettings.MainWindow(mParmConnection, mFileNameVM);
          bool? lStat = lForm.ShowDialog();
          if (true == lStat)
          {
             mParmConnection = lForm.GetParametersConnection();
+            mFileNameVM = lForm.GetFileNameVM();
             mConfigFile.SetDefaultIP(mParmConnection.mIP);
             mConfigFile.SetDefaultPort(mParmConnection.mPort);
+            mConfigFile.SetDefaultFileNameVM(mFileNameVM);
             if (mFactoryObject != null)
                mFactoryObject.CloseChannel();
-            mFactoryObject = new CREFFactoryObject(mParmConnection);
+            mFactoryObject = new CREFFactoryObject(mParmConnection, mFileNameVM);
          }
          return true == lStat;
       }
@@ -57,6 +59,7 @@ namespace client_wpf
          mParmConnection.mIP = mConfigFile.GetDefaultIP();
          mParmConnection.mPort = mConfigFile.GetDefaultPort();
          mParmConnection.mFamily = 2;
+         mFileNameVM = mConfigFile.GetDefaultFileNameVM();
       }
       private void ReloadInfoHDDToListView()
       {
@@ -101,6 +104,7 @@ namespace client_wpf
       private CREFFactoryObject mFactoryObject;
       private CREFConfigFile mConfigFile;
       private CREFConectionParms mParmConnection;
+      private System.String mFileNameVM;
 
       public class ListHDDElement
       {

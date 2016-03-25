@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tools\CFIleName.h" />
     <ClInclude Include="tools\DSmartPtr.h" />
     <ClInclude Include="tools\CExceptions.h" />
     <ClInclude Include="tools\ISocket.h" />
@@ -32,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tools\CExceptions.cpp" />
+    <ClCompile Include="tools\CFIleName.cpp" />
     <ClCompile Include="tools\CSocket.cpp" />
     <ClCompile Include="tools\CThread.cpp" />
     <ClCompile Include="transport\CFormatDataTransport.cpp" />

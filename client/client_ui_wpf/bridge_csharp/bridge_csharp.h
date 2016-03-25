@@ -65,7 +65,7 @@ namespace bridge_csharp
    public ref class CREFFactoryObject
    {
    public:
-      CREFFactoryObject(CREFConectionParms^ aParms);
+      CREFFactoryObject(CREFConectionParms^ aParms, System::String ^aFileNameVM);
       ~CREFFactoryObject();
 
       System::Collections::ArrayList^ CreatePartitionsMeta();
@@ -78,15 +78,18 @@ namespace bridge_csharp
    private:
       IObjectFactory* mObjectFactory;
       CREFConectionParms^ mParms;
+      System::String ^mFileNameVM;
    };
 
    public ref class CREFConfigFile
    {
    public:
       System::String^ GetDefaultIP();
+      System::String^ GetDefaultFileNameVM();
       Int32 GetDefaultPort();
 
       void SetDefaultIP(System::String^ aIP);
+      void SetDefaultFileNameVM(System::String^ aFileNameVM);
       void SetDefaultPort(Int32 aPort);
    };
 }

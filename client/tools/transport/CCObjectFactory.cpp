@@ -8,7 +8,7 @@ class CClientFactory
    :public IObjectFactory
 {
 public:
-   CClientFactory(TConectionParms aParmConnection);
+   CClientFactory(TConectionParms aParmConnection, std::string aFileNameVM);
    ~CClientFactory();
    virtual std::vector<CPartitionMeta::Ptr> CreatePartitionsMeta();
 
@@ -45,7 +45,29 @@ private:
          for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lPartObjects.begin(); lIterator != lPartObjects.end(); ++lIterator)
             lContainerObjects.push_back(*lIterator);
          this->GetSocket()->Send(CFormatDataTransport::command_wait());
-         //lBuffer.Clear();
+         lBuffer.Clear();
+      }
+      return lContainerObjects;
+   }
+
+   template <>
+   std::vector<typename CPartitionMeta::Ptr> GetContainerObjects<CPartitionMeta>()
+   {
+      TBuffer<DEFAULT_BUFLEN> lBuffer;
+      std::vector<typename CPartitionMeta::Ptr> lContainerObjects;
+      this->GetSocket()->Send(CFormatDataTransport::command_get_object_list<CPartitionMeta>() + CFormatDataTransport::Separator + CFormatDataTransport::command_file_name_vm(mFileNameVM));
+      while (this->GetSocket()->Receive(lBuffer.GetData(), lBuffer.GetSize()) &&
+         lBuffer.ToString() != CFormatDataTransport::command_error() &&
+         lBuffer.ToString() != CFormatDataTransport::command_close())
+      {
+         if (lBuffer.ToString().substr(0, CFormatDataTransport::command_error().size()) == CFormatDataTransport::command_error())
+            throw server_exception(lBuffer.ToString());
+
+         std::vector<typename CPartitionMeta::Ptr> lPartObjects = ConverterFromStr::ConvertToList<CPartitionMeta>(lBuffer.ToString());
+         for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lPartObjects.begin(); lIterator != lPartObjects.end(); ++lIterator)
+            lContainerObjects.push_back(*lIterator);
+         this->GetSocket()->Send(CFormatDataTransport::command_wait());
+         lBuffer.Clear();
       }
       return lContainerObjects;
    }
@@ -54,10 +76,11 @@ private:
    ISocket::Ptr mClientSocket;
    TConectionParms mParmConnection;
    ISocketInitializer::Ptr mInitSocket;
+   std::string mFileNameVM;
 };
 
-CClientFactory::CClientFactory(TConectionParms aParmConnection)
-:mParmConnection(aParmConnection), mInitSocket(CreateWinSocketInitializer())
+CClientFactory::CClientFactory(TConectionParms aParmConnection, std::string aFileNameVM)
+:mParmConnection(aParmConnection), mInitSocket(CreateWinSocketInitializer()), mFileNameVM(aFileNameVM)
 {}
 
 CClientFactory::~CClientFactory()
@@ -83,12 +106,12 @@ ISocket::Ptr CClientFactory::GetSocket()
 }
 
 //----------------------------------------------------------------------------
-IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection)
+IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection, std::string aFileNameVM)
 {
-   return IObjectFactory::Ptr(new CClientFactory(aParmConnection));
+   return IObjectFactory::Ptr(new CClientFactory(aParmConnection, aFileNameVM));
 }
-IObjectFactory* CreateClientFactoryNptr(TConectionParms aParmConnection)
+IObjectFactory* CreateClientFactoryNptr(TConectionParms aParmConnection, std::string aFileNameVM)
 {
-   return new CClientFactory(aParmConnection);
+   return new CClientFactory(aParmConnection, aFileNameVM);
 }
 

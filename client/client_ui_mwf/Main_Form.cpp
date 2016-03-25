@@ -9,6 +9,7 @@
 namespace
 {
    TConectionParms gParm;
+   std::string gFileNameVM;
    IObjectFactory::Ptr gFactoryObject;
 }
 
@@ -31,7 +32,7 @@ namespace UserInterface
    IObjectFactory::Ptr Main_Form::GetFactoryObjects()
    {
       if (!gFactoryObject)
-         gFactoryObject = CreateClientFactory(gParm);
+         gFactoryObject = CreateClientFactory(gParm, gFileNameVM);
       return gFactoryObject;
    }
 
@@ -79,16 +80,19 @@ namespace UserInterface
       gParm.mIP = CConfigForms::GetInstance().GetDefaultIP();
       gParm.mFamily = AF_INET;
       gParm.mPort = CConfigForms::GetInstance().GetDefaultPort();
+      gFileNameVM = CConfigForms::GetInstance().GetDefaultFileNameVM();
    }
 
    bool Main_Form::ChangeParmsConnection()
    {
-      UserInterface::Connect_Form lFormConnect(gParm);
+      UserInterface::Connect_Form lFormConnect(gParm, gFileNameVM);
       if (Windows::Forms::DialogResult::OK == lFormConnect.ShowDialog())
       {
          gParm = lFormConnect.GetParametersConnection();
+         gFileNameVM = lFormConnect.GetFileNameVM();
          CConfigForms::GetInstance().SetDefaultIP(gParm.mIP);
          CConfigForms::GetInstance().SetDefaultPort(gParm.mPort);
+         CConfigForms::GetInstance().SetDefaultFileNameVM(gFileNameVM);
          gFactoryObject = NULL;
          return true;
       }

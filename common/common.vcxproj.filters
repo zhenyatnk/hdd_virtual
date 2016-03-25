@@ -39,6 +39,9 @@
     <ClInclude Include="tools\TBuffer.h">
       <Filter>Tools</Filter>
     </ClInclude>
+    <ClInclude Include="tools\CFIleName.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tools\CSocket.cpp">
@@ -55,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="transport\CFormatDataTransport.cpp">
       <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="tools\CFIleName.cpp">
+      <Filter>Tools</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

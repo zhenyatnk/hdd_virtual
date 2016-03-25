@@ -15,9 +15,11 @@ public:
    ~CConfigForms();
 
    std::string GetDefaultIP();
+   std::string GetDefaultFileNameVM();
    UINT32 GetDefaultPort();
 
    void SetDefaultIP(std::string);
+   void SetDefaultFileNameVM(std::string);
    void SetDefaultPort(UINT32);
 
 private:
@@ -30,6 +32,7 @@ private:
 private:
    std::string mFileNameConfig = "config.ini";
 
+   std::string mDefaultFileNameVM;
    std::string mDefaultIP;
    UINT32 mDefaultPort;
 };

@@ -4,7 +4,7 @@
 #include "./../../../common/transport/IObjectFactory.h"
 #include "./../../../common/tools/ISocket.h"
 
-IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection);
-IObjectFactory* CreateClientFactoryNptr(TConectionParms aParmConnection);
+IObjectFactory::Ptr CreateClientFactory(TConectionParms aParmConnection, std::string aFileNameVM);
+IObjectFactory* CreateClientFactoryNptr(TConectionParms aParmConnection, std::string aFileNameVM);
 
 #endif

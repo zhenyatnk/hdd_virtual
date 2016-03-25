@@ -56,12 +56,13 @@ void CChanelClient::Run()
       std::string lString_buffer = lBuffer.ToString();
       if (lString_buffer == CFormatDataTransport::command_close())
          break;
-      else if (lString_buffer == CFormatDataTransport::command_get_object_list<CPartitionMeta>())
+      else if (lString_buffer.substr(0, CFormatDataTransport::command_get_object_list<CPartitionMeta>().size()) == CFormatDataTransport::command_get_object_list<CPartitionMeta>())
       {
          try
          {
-            // HOME IObjectFactory::Ptr lFactoryObject = CreateServerFactory("E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmx", "E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmdk");
-            IObjectFactory::Ptr lFactoryObject = CreateServerFactory("E:\\tmp\\vm\\Windows 8 x64.vmx", "E:\\tmp\\vm\\Windows 8 x64.vmdk");
+            std::string lFileVMParameters = lString_buffer.substr(CFormatDataTransport::command_get_object_list<CPartitionMeta>().size() + 1);
+            lFileVMParameters = lFileVMParameters.substr(CFormatDataTransport::command_file_name_vm().size());
+            IObjectFactory::Ptr lFactoryObject = CreateServerFactory(lFileVMParameters);
             std::vector<CPartitionMeta::Ptr> lContainerObjects = lFactoryObject->CreatePartitionsMeta();
 
             CClientStream lStream(mSocketClient);

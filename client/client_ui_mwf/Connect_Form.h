@@ -15,14 +15,16 @@ namespace UserInterface
       :public System::Windows::Forms::Form
    {
    public:
-      Connect_Form(TConectionParms aParmConnection);
+      Connect_Form(TConectionParms aParmConnection, std::string aFileNameVM);
       TConectionParms GetParametersConnection();
+      std::string GetFileNameVM();
 
    protected:
       ~Connect_Form();
 
    private:
       void InitValueControls(TConectionParms aParmConnection);
+      void InitFileNameControls(std::string aFileNameVM);
       void InitializeComponent(void);
 
    private:
@@ -47,6 +49,9 @@ namespace UserInterface
       System::Windows::Forms::Label^  lDot1;
       System::Windows::Forms::Label^  lDot2;
       System::Windows::Forms::Label^  lDot3;
-      System::ComponentModel::Container ^components;
+   private: System::Windows::Forms::GroupBox^  groupBox1;
+   private: System::Windows::Forms::TextBox^  tbFilenameVM;
+
+            System::ComponentModel::Container ^components;
    };
 }
