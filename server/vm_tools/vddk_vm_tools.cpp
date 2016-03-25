@@ -60,17 +60,19 @@ CVix_DiskLibrary::~CVix_DiskLibrary()
    VixDiskLib_Exit();
 }
 
-bool CVix_DiskLibrary::Connect()
+bool CVix_DiskLibrary::Connect(std::string aSnapshotName)
 {
    VixDiskLibConnectParams cnxParams = { 0 };
-   return Connect(cnxParams);
+   return Connect(cnxParams, aSnapshotName);
 }
-bool CVix_DiskLibrary::Connect(VixDiskLibConnectParams aParms)
+bool CVix_DiskLibrary::Connect(VixDiskLibConnectParams aParms, std::string aSnapshotName)
 {
    Disconnect();
    VixError vixError;
-   vixError = VixDiskLib_Connect(&aParms,
-      &mConnection);
+   if (aSnapshotName.empty())
+      vixError = VixDiskLib_Connect(&aParms, &mConnection);
+   else
+      vixError = VixDiskLib_ConnectEx(&aParms, TRUE, aSnapshotName.c_str(), NULL, &mConnection);
    return VIX_SUCCEEDED(vixError);
 }
 

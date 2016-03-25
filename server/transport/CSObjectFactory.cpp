@@ -24,12 +24,17 @@ std::vector<CPartitionMeta::Ptr> CServerFactory::CreatePartitionsMeta()
 {
    std::vector<CPartitionMeta::Ptr> lContainerPartition;
    std::string lSnapshotName = "VM_SNAP_HDD_INFO";
+   std::string lLoadSnap = "";
    CVix_Host lHost;
    CVix_VirtualMachine::Ptr lVM = lHost.GetVM(mFileNameVM);
    bool lVMRun = lVM->IsPowerOn();
-   if (lVMRun) lVM->AddSnapshot(lSnapshotName, lSnapshotName);
+   if (lVMRun) 
+   {
+      lVM->AddSnapshot(lSnapshotName, lSnapshotName);
+      lLoadSnap = lSnapshotName;
+   }
    CVix_DiskLibrary lDiskLib;
-   if (lDiskLib.Connect())
+   if (lDiskLib.Connect(lLoadSnap))
    {
       CVix_VirtualDisk::Ptr lDisk = lDiskLib.GetVirtualDisk(mFileVirtualDisk);
       lContainerPartition = GetContainerPartitionMeta(lDisk);

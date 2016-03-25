@@ -38,8 +38,8 @@ public:
    CVix_DiskLibrary();
    ~CVix_DiskLibrary();
 
-   bool Connect();
-   bool Connect(VixDiskLibConnectParams aParms);
+   bool Connect(std::string aSnapshotName="");
+   bool Connect(VixDiskLibConnectParams aParms, std::string aSnapshotName="");
 
    CVix_VirtualDisk::Ptr GetVirtualDisk(std::string aDiskPath);
 
