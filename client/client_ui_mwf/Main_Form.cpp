@@ -52,7 +52,7 @@ namespace UserInterface
             if ((*lIterator)->IsBoot())  lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, "*"));
             else                     lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, ""));
             lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)(*lIterator)->GetSizeInSector())));
-            lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, System::Convert::ToString((int)(*lIterator)->GetTypePart())));
+            lHDDInfo->SubItems->Add(gcnew ListViewItem::ListViewSubItem(lHDDInfo, gcnew System::String(ConvertTypeSystem((*lIterator)->GetTypePart()).c_str())));
             lvHDDInfoListView->Items->Add(lHDDInfo);
          }
       }
@@ -60,9 +60,12 @@ namespace UserInterface
       {
          lbLogListBox->Items->Add(gcnew System::String(e.get_message().c_str()));
       }
+      catch (socket_exception_w&e)
+      {
+         lbLogListBox->Items->Add(gcnew System::String(e.get_message().c_str()));
+      }
       catch (System::Object^ e)
       {
-         e->ToString();
          this->Close();
       }
    }
@@ -140,7 +143,7 @@ namespace UserInterface
       // 
       // chHeader_Size
       // 
-      this->chHeader_Size->Text = L"Размер (ГБ)";
+      this->chHeader_Size->Text = L"Размер (МБ)";
       this->chHeader_Size->Width = 91;
       // 
       // chHeader_FileSystem

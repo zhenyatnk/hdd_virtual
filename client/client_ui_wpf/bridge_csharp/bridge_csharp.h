@@ -16,7 +16,18 @@ namespace bridge_csharp
    private:
       System::String^ mMessage;
    };
-   
+
+   public ref class CREFSocketException
+      :public System::Exception
+   {
+   public:
+      CREFSocketException(System::String^ aMessage);
+      System::String^ GetMessage();
+
+   private:
+      System::String^ mMessage;
+   };
+
    public ref class CREFConectionParms
    {
    public:
@@ -41,6 +52,12 @@ namespace bridge_csharp
       bool mIsBoot;
       UInt16 mType;
       UInt32 mSize;
+   };
+
+   public ref class REFConvertTypeSystem
+   {
+   public:
+      static System::String^ Convert(UInt16 aType);
    };
 
    public ref class CREFFactoryObject

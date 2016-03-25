@@ -24,7 +24,7 @@ if (VIX_FAILED((vixError))) \
    throw vm_exception(GetVIXErrorMessage(vixError)); \
 }
 //------------------------------------------------------------------------------
-CVixSnapshot::CVixSnapshot(VixHandle aHandleVM, VixHandle aHandleShapshot)
+CVix_Snapshot::CVix_Snapshot(VixHandle aHandleVM, VixHandle aHandleShapshot)
 :mHandleVM(aHandleVM), mHandleShapshot(aHandleShapshot)
 {
    if (mHandleVM == VIX_INVALID_HANDLE ||
@@ -32,12 +32,12 @@ CVixSnapshot::CVixSnapshot(VixHandle aHandleVM, VixHandle aHandleShapshot)
       throw vm_exception("Cannot get snapshot.");
 }
 
-CVixSnapshot::~CVixSnapshot()
+CVix_Snapshot::~CVix_Snapshot()
 {
    Vix_ReleaseHandle(mHandleShapshot);
 }
 
-std::string CVixSnapshot::GetNameSnapshot()
+std::string CVix_Snapshot::GetNameSnapshot()
 {
    VixError err;
    char *lNameSnapshot = NULL;
@@ -49,25 +49,25 @@ std::string CVixSnapshot::GetNameSnapshot()
    return lNameSnapshot;
 }
 
-VixHandle CVixSnapshot::GetHandle()
+VixHandle CVix_Snapshot::GetHandle()
 {
    return mHandleShapshot;
 }
 
 //------------------------------------------------------------------------------
-CVixVirtualMachine::CVixVirtualMachine(VixHandle aHandleVM)
+CVix_VirtualMachine::CVix_VirtualMachine(VixHandle aHandleVM)
 :mHandleVM(aHandleVM)
 {
    if (mHandleVM == VIX_INVALID_HANDLE)
       throw vm_exception("Cannot get virtal machine.");
 }
 
-CVixVirtualMachine::~CVixVirtualMachine()
+CVix_VirtualMachine::~CVix_VirtualMachine()
 {
    Vix_ReleaseHandle(mHandleVM);
 }
 
-bool CVixVirtualMachine::IsPowerOn()
+bool CVix_VirtualMachine::IsPowerOn()
 {
    VixError err;
    VixToolsState lPowerState = 0;
@@ -79,7 +79,7 @@ bool CVixVirtualMachine::IsPowerOn()
    return (VIX_POWERSTATE_POWERED_ON & lPowerState) == VIX_POWERSTATE_POWERED_ON;
 }
 
-void CVixVirtualMachine::Pause()
+void CVix_VirtualMachine::Pause()
 {
    VixError err;
    VixHandle jobHandle = VIX_INVALID_HANDLE;
@@ -93,7 +93,7 @@ void CVixVirtualMachine::Pause()
    CHECK_AND_THROW(err);
 }
 
-void CVixVirtualMachine::UnPause()
+void CVix_VirtualMachine::UnPause()
 {
    VixError err;
    VixHandle jobHandle = VIX_INVALID_HANDLE;
@@ -107,7 +107,7 @@ void CVixVirtualMachine::UnPause()
    CHECK_AND_THROW(err);
 }
 
-int CVixVirtualMachine::GetNumSnapshots()
+int CVix_VirtualMachine::GetNumSnapshots()
 {
    VixError err;
    int numSnapshots;
@@ -116,7 +116,7 @@ int CVixVirtualMachine::GetNumSnapshots()
    return numSnapshots;
 }
 
-void CVixVirtualMachine::AddSnapshot(std::string aNameSnapshot, std::string aDescription)
+void CVix_VirtualMachine::AddSnapshot(std::string aNameSnapshot, std::string aDescription)
 {
    VixError err;
    VixHandle jobHandle = VIX_INVALID_HANDLE;
@@ -137,26 +137,26 @@ void CVixVirtualMachine::AddSnapshot(std::string aNameSnapshot, std::string aDes
    CHECK_AND_THROW(err);
 }
 
-CVixSnapshot::Ptr CVixVirtualMachine::GetSnapshot(int aIndex)
+CVix_Snapshot::Ptr CVix_VirtualMachine::GetSnapshot(int aIndex)
 {
    VixError err;
    VixHandle snapshotHandle = VIX_INVALID_HANDLE;
 
    err = VixVM_GetRootSnapshot(mHandleVM, aIndex, &snapshotHandle);
    CHECK_AND_THROW(err);
-   return  CVixSnapshot::Ptr(new CVixSnapshot(mHandleVM, snapshotHandle));
+   return  CVix_Snapshot::Ptr(new CVix_Snapshot(mHandleVM, snapshotHandle));
 }
 
-CVixSnapshot::Ptr CVixVirtualMachine::GetSnapshot(std::string aNameSnapshot)
+CVix_Snapshot::Ptr CVix_VirtualMachine::GetSnapshot(std::string aNameSnapshot)
 {
    VixError err;
    VixHandle snapshotHandle = VIX_INVALID_HANDLE;
    err = VixVM_GetNamedSnapshot(mHandleVM, aNameSnapshot.c_str(), &snapshotHandle);
    CHECK_AND_THROW(err);
-   return  CVixSnapshot::Ptr(new CVixSnapshot(mHandleVM, snapshotHandle));
+   return  CVix_Snapshot::Ptr(new CVix_Snapshot(mHandleVM, snapshotHandle));
 }
 
-void CVixVirtualMachine::RemoveSnapshot(std::string aNameSnapshot)
+void CVix_VirtualMachine::RemoveSnapshot(std::string aNameSnapshot)
 {
    VixError err;
    VixHandle jobHandle = VIX_INVALID_HANDLE;
@@ -180,7 +180,7 @@ void CVixVirtualMachine::RemoveSnapshot(std::string aNameSnapshot)
 }
 
 //------------------------------------------------------------------------------
-CVixHost::CVixHost()
+CVix_Host::CVix_Host()
 :mHadleHost(VIX_INVALID_HANDLE)
 {
    VixError err;
@@ -203,12 +203,12 @@ CVixHost::CVixHost()
    CHECK_AND_THROW(err);
 }
 
-CVixHost::~CVixHost()
+CVix_Host::~CVix_Host()
 {
    VixHost_Disconnect(mHadleHost);
 }
 
-CVixVirtualMachine::Ptr CVixHost::GetVM(std::string aFileNameVM)
+CVix_VirtualMachine::Ptr CVix_Host::GetVM(std::string aFileNameVM)
 {
    VixError err;
    VixHandle vmHandle = VIX_INVALID_HANDLE;
@@ -223,5 +223,5 @@ CVixVirtualMachine::Ptr CVixHost::GetVM(std::string aFileNameVM)
       VIX_PROPERTY_NONE);
    Vix_ReleaseHandle(jobHandle);
    CHECK_AND_THROW(err);
-   return CVixVirtualMachine::Ptr(new CVixVirtualMachine(vmHandle));
+   return CVix_VirtualMachine::Ptr(new CVix_VirtualMachine(vmHandle));
 }

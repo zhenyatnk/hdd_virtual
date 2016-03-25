@@ -74,12 +74,17 @@ namespace client_wpf
                else
                   lHDD.Bootable = "";
                lHDD.Size = lHDDMeta.GetSizeInSector();
-               lHDD.Type = lHDDMeta.GetTypePart();
+               lHDD.Type = REFConvertTypeSystem.Convert(lHDDMeta.GetTypePart());
                HDDInfo.Add(lHDD);
             }
             this.DataContext = this;
          }
          catch (CREFServerException Error)
+         {
+            ErrorLog.Add(Error.GetMessage());
+            lbListError.ItemsSource = new List<System.String>(ErrorLog);
+         }
+         catch (CREFSocketException Error)
          {
             ErrorLog.Add(Error.GetMessage());
             lbListError.ItemsSource = new List<System.String>(ErrorLog);
@@ -100,7 +105,7 @@ namespace client_wpf
          public string Name { get; set; }
          public string Bootable { get; set; }
          public uint Size { get; set; }
-         public ushort Type { get; set; }
+         public string Type { get; set; }
       }
       public IList<ListHDDElement> HDDInfo { get; set; }
       public IList<System.String> ErrorLog { get; set; }

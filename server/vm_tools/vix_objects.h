@@ -4,22 +4,22 @@
 #include <memory>
 #include <string>
 #include <vector>
-
+#include "../../common/tools/DSmartPtr.h"
 #include "../External/VMWare/h/vix.h"
 //------------------------------------------------------------------------------
-class CVixSnapshot
+class CVix_Snapshot
 {
 public:
-   typedef std::shared_ptr<CVixSnapshot> Ptr;
-   friend class CVixVirtualMachine;
+   typedef SmartPtr<CVix_Snapshot>::Ptr Ptr;
+   friend class CVix_VirtualMachine;
 
 private:
-   CVixSnapshot(VixHandle aHandleVM, VixHandle aHandleShapshot);
-   CVixSnapshot(const CVixSnapshot&);
-   CVixSnapshot& operator = (const CVixSnapshot&);
+   CVix_Snapshot(VixHandle aHandleVM, VixHandle aHandleShapshot);
+   CVix_Snapshot(const CVix_Snapshot&);
+   CVix_Snapshot& operator = (const CVix_Snapshot&);
 
 public:
-   ~CVixSnapshot();
+   ~CVix_Snapshot();
 
    std::string GetNameSnapshot();
 
@@ -31,19 +31,19 @@ private:
    VixHandle mHandleVM;
 };
 //------------------------------------------------------------------------------
-class CVixVirtualMachine
+class CVix_VirtualMachine
 {
 public:
-   typedef std::shared_ptr<CVixVirtualMachine> Ptr;
-   friend class CVixHost;
+   typedef SmartPtr<CVix_VirtualMachine>::Ptr Ptr;
+   friend class CVix_Host;
 
 private:
-   explicit CVixVirtualMachine(VixHandle aHandle);
-   CVixVirtualMachine(const CVixVirtualMachine&);
-   CVixVirtualMachine& operator = (const CVixVirtualMachine&);
+   explicit CVix_VirtualMachine(VixHandle aHandle);
+   CVix_VirtualMachine(const CVix_VirtualMachine&);
+   CVix_VirtualMachine& operator = (const CVix_VirtualMachine&);
 
 public:
-   ~CVixVirtualMachine();
+   ~CVix_VirtualMachine();
 
    bool IsPowerOn();
    void Pause();
@@ -51,26 +51,26 @@ public:
    int GetNumSnapshots();
    void AddSnapshot(std::string aNameSnapshot, std::string aDescription);
    void RemoveSnapshot(std::string aNameSnapshot);
-   CVixSnapshot::Ptr GetSnapshot(int aIndex);
-   CVixSnapshot::Ptr GetSnapshot(std::string aNameSnapshot);
+   CVix_Snapshot::Ptr GetSnapshot(int aIndex);
+   CVix_Snapshot::Ptr GetSnapshot(std::string aNameSnapshot);
 
 private:
    VixHandle mHandleVM;
 };
 //------------------------------------------------------------------------------
-class CVixHost
+class CVix_Host
 {
 public:
-   CVixHost();
+   CVix_Host();
 
 private:
-   CVixHost(const CVixHost&);
-   CVixHost& operator = (const CVixHost&);
+   CVix_Host(const CVix_Host&);
+   CVix_Host& operator = (const CVix_Host&);
 
 public:
-   ~CVixHost();
+   ~CVix_Host();
 
-   CVixVirtualMachine::Ptr GetVM(std::string aFileNameVM);
+   CVix_VirtualMachine::Ptr GetVM(std::string aFileNameVM);
 
 private:
    VixHandle mHadleHost;

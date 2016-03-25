@@ -24,4 +24,7 @@ private:
    V_UINT8 mType;
    V_UINT32 mSize;
 };
+
+std::string ConvertTypeSystem(V_UINT8 aTypeSystem);
+
 #endif

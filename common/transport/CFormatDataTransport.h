@@ -20,7 +20,7 @@ public:
 
    static std::string command_error()
    {
-      return "ERROR";
+      return CFormatDataTransport::command_error("");
    }
 
    static std::string command_error(std::string aError)

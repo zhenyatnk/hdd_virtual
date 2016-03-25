@@ -58,6 +58,15 @@ namespace bridge_csharp
       return mMessage;
    }
    //-------------------------------------------------------------------------------
+   CREFSocketException::CREFSocketException(System::String^ aMessage)
+      :System::Exception("CREFSocketException"), mMessage(aMessage)
+   {}
+
+   System::String^ CREFSocketException::GetMessage()
+   {
+      return mMessage;
+   }
+   //-------------------------------------------------------------------------------
    CREFConectionParms::CREFConectionParms()
       :mHostName(""), mIP(""), mPort(0), mFamily(0)
    {}
@@ -81,6 +90,12 @@ namespace bridge_csharp
       return mSize;
    }
    //-------------------------------------------------------------------------------
+   System::String^ REFConvertTypeSystem::Convert(UInt16 aType)
+   {
+      return gcnew System::String(ConvertTypeSystem(aType).c_str());
+   }
+
+   //-------------------------------------------------------------------------------
 
    CREFFactoryObject::CREFFactoryObject(CREFConectionParms^ aParms)
       :mParms(aParms), mObjectFactory(NULL)
@@ -101,6 +116,10 @@ namespace bridge_csharp
       catch (server_exception &e)
       {
          throw gcnew CREFServerException(gcnew System::String(e.get_message().c_str()));
+      }
+      catch (socket_exception_w &e)
+      {
+         throw gcnew CREFSocketException(gcnew System::String(e.get_message().c_str()));
       }
    }
 

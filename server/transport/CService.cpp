@@ -3,7 +3,7 @@
 #include "./../../common/transport/CPartitionMeta.h"
 #include "./../../common/tools/CExceptions.h"
 #include "./../../common/transport/CFormatDataTransport.h"
-
+#include "./../../server/transport/CSObjectFactory.h"
 
 //------------------------------------------------------------------------
 CClientStream::CClientStream(ISocket::Ptr aSocketClient)
@@ -56,17 +56,13 @@ void CChanelClient::Run()
       std::string lString_buffer = lBuffer.ToString();
       if (lString_buffer == CFormatDataTransport::command_close())
          break;
-      else if (lString_buffer == CFormatDataTransport::command_get_object<CPartitionMeta>())
-      {
-         CPartitionMeta::Ptr lMeta(new CPartitionMeta(false, 12, 151110));
-         mSocketClient->Send(CFormatDataTransport::command_value_object<ConverterToStr>(lMeta));
-      }
       else if (lString_buffer == CFormatDataTransport::command_get_object_list<CPartitionMeta>())
       {
          try
          {
-            //HOME               std::vector<CPartitionMeta::Ptr> lContainerObjects = GetContainerPartitionMeta("E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmx", "E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmdk");
-            std::vector<CPartitionMeta::Ptr> lContainerObjects = GetContainerPartitionMeta("E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmx", "E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmdk");
+            // HOME IObjectFactory::Ptr lFactoryObject = CreateServerFactory("E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmx", "E:\\VM_ Machine\\Windows 10\\Windows 10 x64.vmdk");
+            IObjectFactory::Ptr lFactoryObject = CreateServerFactory("E:\\tmp\\vm\\Windows 8 x64.vmx", "E:\\tmp\\vm\\Windows 8 x64.vmdk");
+            std::vector<CPartitionMeta::Ptr> lContainerObjects = lFactoryObject->CreatePartitionsMeta();
 
             CClientStream lStream(mSocketClient);
             for (std::vector<CPartitionMeta::Ptr>::iterator lIterator = lContainerObjects.begin(); lIterator != lContainerObjects.end(); ++lIterator)

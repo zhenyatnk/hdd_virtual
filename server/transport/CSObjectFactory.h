@@ -3,6 +3,6 @@
 
 #include "./../../common/transport/IObjectFactory.h"
 
-IObjectFactory::Ptr CreateServerFactory();
+IObjectFactory::Ptr CreateServerFactory(std::string aFileNameVM, std::string aFileVirtualDisk);
 
 #endif

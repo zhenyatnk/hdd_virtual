@@ -7,13 +7,14 @@
 #include <vector>
 
 #include "../../common/tools/TBuffer.h"
+#include "../../common/tools/DSmartPtr.h"
 #include "../External/VMWare/h/vixDiskLib.h"
 
 //------------------------------------------------------------------------------
 class CVix_VirtualDisk
 {
 public:
-   typedef std::shared_ptr<CVix_VirtualDisk> Ptr;
+   typedef  SmartPtr<CVix_VirtualDisk>::Ptr Ptr;
    friend class CVix_DiskLibrary;
 
 private:
@@ -37,7 +38,7 @@ public:
    CVix_DiskLibrary();
    ~CVix_DiskLibrary();
 
-   bool Connect(std::string aNameVM = "");
+   bool Connect();
    bool Connect(VixDiskLibConnectParams aParms);
 
    CVix_VirtualDisk::Ptr GetVirtualDisk(std::string aDiskPath);

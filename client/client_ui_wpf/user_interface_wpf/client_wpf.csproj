@@ -73,6 +73,10 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="bridge_csharp, Version=1.0.5928.17201, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\obj\bridge_csharp.dll</HintPath>
+    </Reference>
     <Reference Include="NumericUpDown, Version=0.1.6.1, Culture=neutral, PublicKeyToken=74df933eb4e7b0ca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\obj\NumericUpDown.dll</HintPath>
@@ -142,12 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\bridge_csharp\bridge_csharp.vcxproj">
-      <Project>{cf92d7ec-7256-45d5-bf5e-ba6c5bf47fcd}</Project>
-      <Name>bridge_csharp</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

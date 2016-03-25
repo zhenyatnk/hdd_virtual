@@ -60,15 +60,9 @@ CVix_DiskLibrary::~CVix_DiskLibrary()
    VixDiskLib_Exit();
 }
 
-bool CVix_DiskLibrary::Connect(std::string aNameVM)
+bool CVix_DiskLibrary::Connect()
 {
    VixDiskLibConnectParams cnxParams = { 0 };
-   if (!aNameVM.empty())
-   {
-      cnxParams.vmxSpec = new char(aNameVM.size() + 1);
-      memset(cnxParams.vmxSpec, 0, aNameVM.size() + 1);
-      strcpy(cnxParams.vmxSpec, aNameVM.c_str());
-   }
    return Connect(cnxParams);
 }
 bool CVix_DiskLibrary::Connect(VixDiskLibConnectParams aParms)

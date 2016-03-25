@@ -1,5 +1,4 @@
 #include <iostream>
-#include "../../common/tools/CExceptions.h"
 #include "../vm_tools/vix_objects.h"
 #include "../vm_tools/vddk_vm_tools.h"
 #include "hdd_info_tools.h"
@@ -79,24 +78,6 @@ std::vector<CPartitionMeta::Ptr> GetContainerPartitionMeta(CVix_VirtualDisk::Ptr
          lContainerPartition.push_back(CPartitionMeta::Ptr(new CPartitionMeta(lIsBoot, lType, lSize)));
       }
    }
-   return lContainerPartition;
-}
-
-std::vector<CPartitionMeta::Ptr> GetContainerPartitionMeta(std::string aFileNameVM, std::string aFileVirtualDisk)
-{
-   std::vector<CPartitionMeta::Ptr> lContainerPartition;
-   std::string lSnapshotName = "VM_SNAP_HDD_INFO";
-   CVixHost lHost;
-   CVixVirtualMachine::Ptr lVM = lHost.GetVM(aFileNameVM);
-   bool lVMRun = lVM->IsPowerOn();
-   if (lVMRun) lVM->AddSnapshot(lSnapshotName, lSnapshotName);
-   CVix_DiskLibrary lDiskLib;
-   if (lDiskLib.Connect(aFileNameVM))
-   {
-      CVix_VirtualDisk::Ptr lDisk = lDiskLib.GetVirtualDisk(aFileVirtualDisk);
-      lContainerPartition = GetContainerPartitionMeta(lDisk);
-   }
-   if (lVMRun) lVM->RemoveSnapshot(lSnapshotName);
    return lContainerPartition;
 }
 //------------------------------------------------------------------------------
